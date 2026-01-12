@@ -1,0 +1,232 @@
+{
+  "name": "Chatbot Automatize - DeepSeek AI",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chatbot-automatize",
+        "options": {
+          "responseMode": "lastNode"
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Recebe Mensagem",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "chatbot-automatize-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai a mensagem e contexto do request\nconst body = $input.first().json.body;\nconst message = body.message || '';\nconst productContext = body.productContext || null;\nconst sessionId = body.sessionId || 'anonymous';\n\n// Contexto base sobre os produtos\nconst productsCatalog = `\n## CATÁLOGO DE PRODUTOS:\n\n### 1. Point Control (R$ 147)\n- Categoria: RH\n- Descrição: Controle de ponto + relatórios automáticos\n- Para: Empresas com 5-50 funcionários\n- Inclui: Workflow n8n, PDF 30 páginas, 5 vídeos, templates\n- Funcionalidades: Registro via WhatsApp/Telegram, cálculo de horas extras, relatórios mensais\n\n### 2. LinkedIn Pro (R$ 197)  \n- Categoria: Vendas\n- Descrição: Prospecção automatizada no LinkedIn\n- Para: Vendedores B2B, agências, consultores\n- Resultado: Média de 50 leads/semana\n- Inclui: Workflow n8n, 8 templates de mensagens, 50 ganchos testados\n\n### 3. Auto Post Social (R$ 127)\n- Categoria: Marketing\n- Descrição: Agendamento e publicação em redes sociais\n- Para: Social media managers, empreendedores\n- Publica em: Instagram, Facebook, Twitter, LinkedIn, TikTok\n- Inclui: Workflow n8n, 100 templates de posts, calendário de conteúdo\n\n### 4. Invoice Master (R$ 197)\n- Categoria: Financeiro\n- Descrição: Emissão automática de notas fiscais\n- Para: Infoprodutores, agências, contadores\n- Funcionalidades: NF-e/NFS-e, detecção de pagamentos, envio por email\n\n### 5. WhatsApp Atendimento Pro (R$ 167)\n- Categoria: Vendas\n- Descrição: Chatbot + atendimento organizado por setores\n- Para: Lojas, empresas de serviço\n- Funcionalidades: Menu interativo, FAQs, fila inteligente, 24/7\n\n### 6. Email Ninja (R$ 147)\n- Categoria: Marketing\n- Descrição: Sequências de email automatizadas\n- Para: Infoprodutores, e-commerces\n- Inclui: 30 templates, sequências por nicho, A/B testing\n`;\n\n// Informações gerais\nconst generalInfo = `\n## INFORMAÇÕES GERAIS:\n\n### Entrega:\n- 100% automática após pagamento\n- Email com acesso em até 2 minutos\n- Área de membros com todos os arquivos\n\n### O que vem em cada produto:\n- Workflow n8n (JSON pronto para importar)\n- Guia PDF detalhado (20-35 páginas)\n- Vídeos tutoriais passo a passo\n- Templates e materiais extras\n- Suporte via Telegram por 30 dias\n\n### Garantia:\n- 7 dias incondicional\n- Devolução de 100% do valor\n- Sem perguntas\n\n### Suporte:\n- Grupo Telegram exclusivo (30 dias)\n- Email: suporte@automatize.com.br\n- Resposta em até 24h\n\n### Pagamento:\n- PIX (aprovação instantânea)\n- Cartão de crédito\n- Boleto bancário\n- Processado pela Kiwify (plataforma segura)\n\n### Sobre o n8n:\n- Plataforma de automação (como Zapier, mas gratuita e mais poderosa)\n- Pode usar n8n.cloud (mais fácil) ou self-hosted\n- Não precisa saber programar - é visual (arrasta e solta)\n- Integra com 400+ aplicativos\n\n### Tempo de configuração:\n- Média: 15-30 minutos\n- Vídeos mostram cada passo\n- Se travar, suporte ajuda\n`;\n\nreturn {\n  message,\n  productContext,\n  sessionId,\n  systemPrompt: `Você é o assistente virtual do Automatize, um marketplace brasileiro de automações n8n prontas para usar.\n\nSua personalidade:\n- Amigável e profissional\n- Direto e objetivo (respostas curtas, 2-4 linhas)\n- Usa emojis com moderação\n- Fala português brasileiro\n- Orientado a ajudar o cliente a encontrar a automação ideal\n\nRegras:\n1. Sempre sugira produtos relevantes quando fizer sentido\n2. Se não souber algo específico, direcione para o suporte\n3. Nunca invente informações sobre preços ou funcionalidades\n4. Incentive a compra de forma natural, sem ser insistente\n5. Se perguntarem sobre automação personalizada, mencione que fazemos sob medida\n\n${productsCatalog}\n\n${generalInfo}\n\nResponda à pergunta do usuário de forma útil e concisa.`\n};"
+      },
+      "id": "prepare-context",
+      "name": "Prepara Contexto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepseek.com/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  \"model\": \"deepseek-chat\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $json[\"systemPrompt\"] },\n    { \"role\": \"user\", \"content\": $json[\"message\"] }\n  ],\n  \"temperature\": 0.7\n}) }}",
+        "options": {}
+      },
+      "id": "deepseek-ai",
+      "name": "DeepSeek AI - Resposta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        690,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "SUBSTITUA_PELA_SUA_CREDENTIAL_ID_DEEPSEEK",
+          "name": "DeepSeek API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai a resposta do DeepSeek\nconst deepseekResponse = $input.first().json;\n\n// Trata a resposta da API (formato OpenAI compatible)\nlet answer = '';\n\nif (deepseekResponse.choices && deepseekResponse.choices[0] && deepseekResponse.choices[0].message) {\n  answer = deepseekResponse.choices[0].message.content;\n} else if (deepseekResponse.error) {\n  answer = 'Erro na IA: ' + (deepseekResponse.error.message || 'Desconhecido');\n} else {\n  answer = 'Desculpe, tive um problema ao processar sua mensagem. Tente novamente.';\n}\n\n// Detecta se deve sugerir produtos\nconst suggestedProducts = [];\n// Recupera o contexto do nó anterior\nconst contextNode = $('Prepara Contexto').first().json;\nconst lowerMessage = contextNode.message ? contextNode.message.toLowerCase() : '';\n\nif (lowerMessage.includes('rh') || lowerMessage.includes('ponto') || lowerMessage.includes('funcionário')) {\n  suggestedProducts.push({ id: 'point-control', name: 'Point Control' });\n}\nif (lowerMessage.includes('linkedin') || lowerMessage.includes('prospecção') || lowerMessage.includes('lead')) {\n  suggestedProducts.push({ id: 'linkedin-pro', name: 'LinkedIn Pro' });\n}\nif (lowerMessage.includes('social') || lowerMessage.includes('instagram') || lowerMessage.includes('post')) {\n  suggestedProducts.push({ id: 'auto-post-social', name: 'Auto Post Social' });\n}\nif (lowerMessage.includes('whatsapp') || lowerMessage.includes('atendimento')) {\n  suggestedProducts.push({ id: 'whatsapp-atendimento', name: 'WhatsApp Atendimento Pro' });\n}\nif (lowerMessage.includes('email') || lowerMessage.includes('newsletter')) {\n  suggestedProducts.push({ id: 'email-ninja', name: 'Email Ninja' });\n}\nif (lowerMessage.includes('nota') || lowerMessage.includes('fiscal') || lowerMessage.includes('nf')) {\n  suggestedProducts.push({ id: 'invoice-master', name: 'Invoice Master' });\n}\n\nreturn {\n  answer,\n  suggestedProducts: suggestedProducts.slice(0, 2),\n  sessionId: contextNode.sessionId,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "format-response",
+      "name": "Formata Resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Responde ao Site",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1130,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "create",
+        "table": "Chat Logs",
+        "fields": {
+          "values": [
+            {
+              "fieldId": "Message",
+              "fieldValue": "={{ $('Prepara Contexto').first().json.message }}"
+            },
+            {
+              "fieldId": "Response",
+              "fieldValue": "={{ $json.answer }}"
+            },
+            {
+              "fieldId": "Session ID",
+              "fieldValue": "={{ $json.sessionId }}"
+            },
+            {
+              "fieldId": "Timestamp",
+              "fieldValue": "={{ $json.timestamp }}"
+            }
+          ]
+        }
+      },
+      "id": "save-airtable",
+      "name": "Salva no Airtable (Opcional)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        910,
+        500
+      ],
+      "disabled": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SUBSTITUA_PELA_SUA_CREDENTIAL_ID",
+          "name": "Airtable Token"
+        }
+      },
+      "notes": "Desativado por padrão. Ative e configure para salvar logs das conversas."
+    },
+    {
+      "parameters": {
+        "chatId": "SEU_CHAT_ID_TELEGRAM",
+        "text": "💬 Nova pergunta no chatbot:\n\n*Pergunta:* {{ $('Prepara Contexto').first().json.message }}\n\n*Resposta:* {{ $json.answer }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "notify-telegram",
+      "name": "Notifica Telegram (Opcional)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1130,
+        500
+      ],
+      "disabled": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "SUBSTITUA_PELA_SUA_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      },
+      "notes": "Desativado por padrão. Ative para receber notificações de perguntas no Telegram."
+    }
+  ],
+  "connections": {
+    "Webhook - Recebe Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Prepara Contexto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Contexto": {
+      "main": [
+        [
+          {
+            "node": "DeepSeek AI - Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek AI - Resposta": {
+      "main": [
+        [
+          {
+            "node": "Formata Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Resposta": {
+      "main": [
+        [
+          {
+            "node": "Responde ao Site",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Salva no Airtable (Opcional)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notifica Telegram (Opcional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "chatbot"
+    },
+    {
+      "name": "automatize"
+    }
+  ]
+}

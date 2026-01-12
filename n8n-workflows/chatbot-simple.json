@@ -1,0 +1,90 @@
+{
+    "name": "Chatbot Automatize - Regras Simples",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "chatbot-simple",
+                "options": {
+                    "responseMode": "lastNode"
+                }
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook - Recebe Mensagem",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                250,
+                300
+            ],
+            "webhookId": "chatbot-simple-webhook"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Chatbot baseado em regras - sem IA\nconst body = $input.first().json.body;\nconst message = (body.message || '').toLowerCase().trim();\nconst sessionId = body.sessionId || 'anonymous';\n\n// Base de conhecimento\nconst products = {\n  'point-control': {\n    name: 'Point Control',\n    price: 147,\n    category: 'RH',\n    description: 'Controle de ponto + relatórios automáticos para sua equipe',\n    includes: ['Workflow n8n completo', 'Guia PDF 30 páginas', '5 vídeos tutoriais', 'Templates prontos'],\n    forWho: 'Empresas com 5-50 funcionários'\n  },\n  'linkedin-pro': {\n    name: 'LinkedIn Pro',\n    price: 197,\n    category: 'Vendas',\n    description: 'Prospecção automatizada no LinkedIn - gere 50+ leads/semana',\n    includes: ['Workflow n8n completo', '8 templates de mensagens', '50 ganchos testados'],\n    forWho: 'Vendedores B2B, agências, consultores'\n  },\n  'auto-post-social': {\n    name: 'Auto Post Social',\n    price: 127,\n    category: 'Marketing',\n    description: 'Agende e publique automaticamente em todas as redes sociais',\n    includes: ['Workflow n8n completo', '100 templates de posts', 'Calendário de conteúdo'],\n    forWho: 'Social media managers, empreendedores'\n  },\n  'invoice-master': {\n    name: 'Invoice Master',\n    price: 197,\n    category: 'Financeiro',\n    description: 'Emita notas fiscais automaticamente',\n    includes: ['Workflow n8n completo', 'Guia fiscal PDF', '7 vídeos tutoriais'],\n    forWho: 'Infoprodutores, agências, contadores'\n  },\n  'whatsapp-atendimento': {\n    name: 'WhatsApp Atendimento Pro',\n    price: 167,\n    category: 'Vendas',\n    description: 'Chatbot inteligente + atendimento organizado por setores',\n    includes: ['Workflow n8n completo', 'Scripts de atendimento', '20+ templates'],\n    forWho: 'Lojas, empresas de serviço'\n  },\n  'email-ninja': {\n    name: 'Email Ninja',\n    price: 147,\n    category: 'Marketing',\n    description: 'Sequências de email que vendem no piloto automático',\n    includes: ['Workflow n8n completo', '30 templates de email', 'Sequências por nicho'],\n    forWho: 'Infoprodutores, e-commerces'\n  }\n};\n\n// Função para detectar intenção\nfunction detectIntent(msg) {\n  // Saudações\n  if (/^(oi|olá|ola|hey|ei|bom dia|boa tarde|boa noite|e ai|eai)/i.test(msg)) {\n    return 'greeting';\n  }\n  \n  // Preços\n  if (/pre[cç]o|valor|quanto custa|quanto é|investimento/i.test(msg)) {\n    return 'price';\n  }\n  \n  // Garantia\n  if (/garantia|reembolso|devolver|dinheiro de volta/i.test(msg)) {\n    return 'guarantee';\n  }\n  \n  // Entrega\n  if (/entrega|recebo|como funciona|acesso/i.test(msg)) {\n    return 'delivery';\n  }\n  \n  // Suporte\n  if (/suporte|ajuda|dúvida|problema|não consigo|não funciona/i.test(msg)) {\n    return 'support';\n  }\n  \n  // O que é n8n\n  if (/o que é n8n|n8n é|como funciona n8n/i.test(msg)) {\n    return 'n8n';\n  }\n  \n  // Precisa programar\n  if (/programar|código|programação|desenvolvedor|técnico/i.test(msg)) {\n    return 'programming';\n  }\n  \n  // Instalação\n  if (/instalar|configurar|setup|implementar/i.test(msg)) {\n    return 'install';\n  }\n  \n  // Produtos específicos\n  if (/point control|ponto|rh|recursos humanos|funcionário/i.test(msg)) {\n    return 'product_point_control';\n  }\n  if (/linkedin|prospec[çc][aã]o|leads? b2b/i.test(msg)) {\n    return 'product_linkedin';\n  }\n  if (/auto post|redes sociais|instagram|facebook|tiktok|postar/i.test(msg)) {\n    return 'product_auto_post';\n  }\n  if (/invoice|nota fiscal|nf-?e|nfs-?e|emitir nota/i.test(msg)) {\n    return 'product_invoice';\n  }\n  if (/whatsapp|atendimento|chatbot|bot/i.test(msg)) {\n    return 'product_whatsapp';\n  }\n  if (/email|newsletter|sequência|automação de email/i.test(msg)) {\n    return 'product_email';\n  }\n  \n  // Comprar\n  if (/comprar|quero|adquirir|contratar/i.test(msg)) {\n    return 'buy';\n  }\n  \n  // Falar com humano\n  if (/falar com|humano|pessoa|atendente|vendedor/i.test(msg)) {\n    return 'human';\n  }\n  \n  // Automação personalizada\n  if (/personaliza|sob medida|específic|custom/i.test(msg)) {\n    return 'custom';\n  }\n  \n  return 'unknown';\n}\n\n// Respostas\nconst responses = {\n  greeting: {\n    answer: '👋 Oi! Sou o assistente do Automatize. Como posso ajudar você hoje?',\n    options: ['Quero ver as automações', 'Como funciona a entrega?', 'Tenho uma dúvida']\n  },\n  price: {\n    answer: '💰 Nossos preços variam de R$ 127 a R$ 197, dependendo da automação. Todos são pagamentos únicos, sem mensalidades!\\n\\n📦 Point Control: R$ 147\\n📦 LinkedIn Pro: R$ 197\\n📦 Auto Post Social: R$ 127\\n📦 Invoice Master: R$ 197\\n📦 WhatsApp Atendimento: R$ 167\\n📦 Email Ninja: R$ 147',\n    options: ['Ver detalhes de um produto', 'Como funciona a garantia?']\n  },\n  guarantee: {\n    answer: '🛡️ Oferecemos **7 dias de garantia incondicional**!\\n\\nSe você não ficar satisfeito por qualquer motivo, basta enviar um email e devolvemos 100% do valor. Sem perguntas, sem burocracia.',\n    options: ['Quero ver as automações', 'Como funciona a entrega?']\n  },\n  delivery: {\n    answer: '⚡ A entrega é 100% automática!\\n\\n1️⃣ Compra aprovada (PIX em segundos)\\n2️⃣ Email com acesso em até 2 minutos\\n3️⃣ Área de membros com todos os arquivos\\n\\n📦 Você recebe: Workflow n8n (JSON), Guia PDF, Vídeos tutoriais e Templates prontos.',\n    options: ['O que é n8n?', 'Preciso saber programar?']\n  },\n  support: {\n    answer: '💬 Para suporte, você tem várias opções:\\n\\n📚 Base de conhecimento nos PDFs\\n💬 Grupo Telegram exclusivo (30 dias)\\n📧 Email: suporte@automatize.com.br\\n\\n⏱️ Tempo de resposta: até 24h',\n    options: ['Voltar ao início']\n  },\n  n8n: {\n    answer: '🔧 O **n8n** é uma plataforma de automação (como Zapier ou Make), mas:\\n\\n🆓 Versão gratuita muito generosa\\n💪 Muito mais poderosa\\n🔓 Open source\\n\\nVocê pode usar n8n.cloud (mais fácil, tem plano grátis) ou self-hosted.',\n    options: ['Preciso saber programar?', 'Ver automações']\n  },\n  programming: {\n    answer: '🙌 **Não precisa saber programar!**\\n\\nO n8n é 100% visual (arrasta e solta).\\n\\nNossas automações já vêm prontas — você só:\\n✅ Importa o arquivo\\n✅ Configura suas credenciais\\n✅ Ativa\\n\\nOs vídeos mostram cada passo!',\n    options: ['Como funciona a entrega?', 'Ver automações']\n  },\n  install: {\n    answer: '🛠️ Instalar é super simples! 5 passos:\\n\\n1️⃣ Crie conta gratuita no n8n.cloud\\n2️⃣ Importe o arquivo JSON (1 clique)\\n3️⃣ Configure suas credenciais (seguindo o vídeo)\\n4️⃣ Ative o workflow\\n5️⃣ Pronto! 🎉\\n\\nTempo médio: 15-30 minutos',\n    options: ['O que é n8n?', 'Ver automações']\n  },\n  product_point_control: {\n    answer: `**${products['point-control'].name}** - ${products['point-control'].description} 🕐\\n\\n📦 O que você recebe:\\n${products['point-control'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['point-control'].price} (pagamento único)\\n🏆 Ideal para: ${products['point-control'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'point-control'\n  },\n  product_linkedin: {\n    answer: `**${products['linkedin-pro'].name}** - ${products['linkedin-pro'].description} 🔗\\n\\n📦 O que você recebe:\\n${products['linkedin-pro'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['linkedin-pro'].price} (pagamento único)\\n🏆 Ideal para: ${products['linkedin-pro'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'linkedin-pro'\n  },\n  product_auto_post: {\n    answer: `**${products['auto-post-social'].name}** - ${products['auto-post-social'].description} 📱\\n\\n📦 O que você recebe:\\n${products['auto-post-social'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['auto-post-social'].price} (pagamento único)\\n🏆 Ideal para: ${products['auto-post-social'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'auto-post-social'\n  },\n  product_invoice: {\n    answer: `**${products['invoice-master'].name}** - ${products['invoice-master'].description} 📄\\n\\n📦 O que você recebe:\\n${products['invoice-master'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['invoice-master'].price} (pagamento único)\\n🏆 Ideal para: ${products['invoice-master'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'invoice-master'\n  },\n  product_whatsapp: {\n    answer: `**${products['whatsapp-atendimento'].name}** - ${products['whatsapp-atendimento'].description} 💬\\n\\n📦 O que você recebe:\\n${products['whatsapp-atendimento'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['whatsapp-atendimento'].price} (pagamento único)\\n🏆 Ideal para: ${products['whatsapp-atendimento'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'whatsapp-atendimento'\n  },\n  product_email: {\n    answer: `**${products['email-ninja'].name}** - ${products['email-ninja'].description} 📧\\n\\n📦 O que você recebe:\\n${products['email-ninja'].includes.map(i => '• ' + i).join('\\n')}\\n\\n💰 Investimento: R$ ${products['email-ninja'].price} (pagamento único)\\n🏆 Ideal para: ${products['email-ninja'].forWho}`,\n    options: ['Quero comprar', 'Ver outros produtos'],\n    suggestedProduct: 'email-ninja'\n  },\n  buy: {\n    answer: '🛒 Para comprar, é simples!\\n\\n1️⃣ Acesse a página do produto no site\\n2️⃣ Clique em \"Comprar Agora\"\\n3️⃣ Escolha a forma de pagamento (PIX, cartão ou boleto)\\n4️⃣ Pronto! Acesso imediato após aprovação\\n\\n🔗 Acesse: automatize.com.br/produtos',\n    options: ['Ver automações', 'Como funciona a garantia?']\n  },\n  human: {\n    answer: '🙋‍♂️ Claro! Para falar com nossa equipe:\\n\\n📧 Email: contato@automatize.com.br\\n💬 Telegram: @automatize\\n\\nRespondemos em até 24h (normalmente muito antes!)',\n    options: ['Voltar ao início']\n  },\n  custom: {\n    answer: '🛠️ Fazemos sim automações personalizadas!\\n\\nSe você precisa de algo específico para seu negócio, podemos criar sob medida.\\n\\n📧 Solicite um orçamento: contato@automatize.com.br\\n\\nDescreva sua necessidade e respondemos com uma proposta.',\n    options: ['Ver automações prontas', 'Voltar ao início']\n  },\n  unknown: {\n    answer: '🤔 Não tenho certeza se entendi sua pergunta.\\n\\nPosso te ajudar com:\\n• Informações sobre automações\\n• Como funciona a entrega\\n• Suporte técnico\\n• Falar com nossa equipe\\n\\nO que prefere?',\n    options: ['Ver automações', 'Como funciona?', 'Falar com humano']\n  }\n};\n\n// Detecta intenção e monta resposta\nconst intent = detectIntent(message);\nconst response = responses[intent] || responses.unknown;\n\nreturn {\n  answer: response.answer,\n  options: response.options || [],\n  suggestedProduct: response.suggestedProduct || null,\n  intent,\n  sessionId,\n  timestamp: new Date().toISOString()\n};"
+            },
+            "id": "process-message",
+            "name": "Processa Mensagem (Regras)",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                470,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "respond-webhook",
+            "name": "Responde ao Site",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                690,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - Recebe Mensagem": {
+            "main": [
+                [
+                    {
+                        "node": "Processa Mensagem (Regras)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Processa Mensagem (Regras)": {
+            "main": [
+                [
+                    {
+                        "node": "Responde ao Site",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "tags": [
+        {
+            "name": "chatbot"
+        },
+        {
+            "name": "automatize"
+        },
+        {
+            "name": "simple"
+        }
+    ],
+    "triggerCount": 1,
+    "pinData": {}
+}

@@ -1,239 +1,263 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import {
-    Search,
     LayoutGrid,
+    Package,
+    Target, // Use Target for 'Bounties' icon (Crosshair style)
+    Radio,
+    Settings,
+    Search,
+    ArrowRight,
     Users,
     TrendingUp,
     Megaphone,
     Calculator,
-    Settings,
-    SlidersHorizontal
+    Cpu,
+    Database,
+    Zap,
+    Shield
 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import ProductCard from '@/components/ProductCard';
-import { products, categories } from '@/lib/products';
-import Fuse from 'fuse.js';
+import { products } from '@/lib/products';
 
-const categoryIcons: { [key: string]: React.ComponentType<{ className?: string }> } = {
-    todos: LayoutGrid,
-    rh: Users,
-    vendas: TrendingUp,
-    marketing: Megaphone,
-    financeiro: Calculator,
-    operacional: Settings,
+// --- Configuration & Mocks ---
+
+const sidebarItems = [
+    { icon: LayoutGrid, label: 'DASHBOARD', active: false },
+    { icon: Package, label: 'WAREHOUSE', active: true }, // Active page
+    { icon: Target, label: 'BOUNTIES', active: false },
+    { icon: Radio, label: 'COMMUNICATIONS', active: false },
+];
+
+// Mapping categories to the massive color cards style
+// Using the reference colors: Yellow, Blue, Red, Green
+const cardStyles: { [key: string]: { bg: string; text: string; sub: string; icon: any; japanese: string } } = {
+    rh: {
+        bg: 'bg-[#E9C46A]', // Yellow
+        text: 'text-black',
+        sub: 'text-black/60',
+        icon: Users,
+        japanese: 'ニューラル' // Neural
+    },
+    vendas: {
+        bg: 'bg-[#2E5BFF]', // Cobalt Blue
+        text: 'text-white',
+        sub: 'text-white/60',
+        icon: TrendingUp,
+        japanese: '同期' // Sync
+    },
+    marketing: {
+        bg: 'bg-[#E63946]', // Red
+        text: 'text-white',
+        sub: 'text-white/60',
+        icon: Megaphone,
+        japanese: 'ボイド' // Void
+    },
+    financeiro: {
+        bg: 'bg-[#2A9D8F]', // Green (Reference is darker, but keeping our palette cohesion)
+        text: 'text-white',
+        sub: 'text-white/60', // Darker text for contrast on teal
+        icon: Calculator,
+        japanese: 'キネティック' // Kinetic
+    },
+    operacional: {
+        bg: 'bg-[#F4F4F4]',
+        text: 'text-black',
+        sub: 'text-black/60',
+        icon: Settings,
+        japanese: 'オペレー' // Ops
+    }
 };
 
 export default function ProductsPage() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('todos');
+    const [filter, setFilter] = useState('ALL_SYS');
 
-    // Fuse.js for fuzzy search
-    const fuse = useMemo(() => new Fuse(products, {
-        keys: ['name', 'shortDescription', 'features', 'category'],
-        threshold: 0.4,
-    }), []);
-
-    // Filter products based on search and category
-    const filteredProducts = useMemo(() => {
-        let result = products;
-
-        // Apply search
-        if (searchQuery.trim()) {
-            const searchResults = fuse.search(searchQuery);
-            result = searchResults.map(r => r.item);
-        }
-
-        // Apply category filter
-        if (selectedCategory !== 'todos') {
-            result = result.filter(p => p.category === selectedCategory);
-        }
-
-        return result;
-    }, [searchQuery, selectedCategory, fuse]);
+    // Filter Logic
+    const filteredProducts = products.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesFilter = filter === 'ALL_SYS' || p.category.toUpperCase() === filter; // Simplified filter
+        return matchesSearch && matchesFilter;
+    });
 
     return (
-        <main className="min-h-screen pt-24 pb-16">
-            {/* Hero Section */}
-            <section className="relative overflow-hidden py-12 lg:py-16">
-                <div className="absolute inset-0 bg-mesh" />
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#f97316]/10 rounded-full blur-3xl" />
+        <div className="flex min-h-screen bg-[#050505] text-white font-sans overflow-hidden">
 
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-center max-w-3xl mx-auto"
-                    >
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                            Todas as <span className="text-gradient-orange">Automações</span>
-                        </h1>
-                        <p className="text-muted-foreground text-lg mb-8">
-                            Encontre a automação perfeita para o seu negócio. Cada uma vem com guias, vídeos e suporte.
-                        </p>
-
-                        {/* Search Bar */}
-                        <div className="relative max-w-xl mx-auto">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                            <Input
-                                type="text"
-                                placeholder="Buscar automações..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 h-14 text-lg bg-card border-border focus:border-[#f97316] rounded-xl"
-                            />
-                        </div>
-                    </motion.div>
+            {/* --- SIDEBAR --- */}
+            <aside className="hidden lg:flex w-64 flex-col border-r border-white/10 pt-8 pb-6 px-6 relative z-20 bg-[#050505]">
+                {/* Brand */}
+                <div className="mb-12">
+                    <div className="flex items-center gap-2 mb-1 text-[#2E5BFF] animate-pulse">
+                        <div className="w-2 h-2 rounded-full bg-[#2E5BFF]" />
+                        <span className="text-[10px] font-mono tracking-widest">SYSTEM: ONLINE</span>
+                    </div>
+                    <h1 className="font-display text-2xl leading-none text-white uppercase">
+                        BEBOP<br />AUTOMATIONS
+                    </h1>
                 </div>
-            </section>
 
-            {/* Filters & Products */}
-            <section className="container mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Category Filters */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="mb-8"
-                >
-                    <div className="flex items-center gap-2 mb-4">
-                        <SlidersHorizontal className="w-5 h-5 text-muted-foreground" />
-                        <span className="text-sm font-medium text-muted-foreground">Filtrar por categoria:</span>
-                    </div>
+                {/* Navigation */}
+                <nav className="flex-1 space-y-6">
+                    {sidebarItems.map((item) => {
+                        const isDashboard = item.label === 'DASHBOARD';
 
-                    <div className="flex flex-wrap gap-2">
-                        {categories.map((category) => {
-                            const Icon = categoryIcons[category.id];
-                            const isSelected = selectedCategory === category.id;
+                        const Content = (
+                            <div className={`flex items-center gap-4 text-sm font-bold tracking-widest uppercase transition-colors group w-full text-left cursor-pointer
+                                ${item.active ? 'text-[#2E5BFF]' : 'text-gray-500 hover:text-white'}
+                            `}>
+                                <item.icon className={`w-5 h-5 ${item.active ? 'text-[#2E5BFF]' : 'text-gray-600 group-hover:text-white'}`} />
+                                {item.label}
+                                {item.active && <div className="ml-auto w-1 h-4 bg-[#2E5BFF]" />}
+                            </div>
+                        );
 
+                        if (isDashboard) {
                             return (
-                                <Button
-                                    key={category.id}
-                                    variant={isSelected ? 'default' : 'outline'}
-                                    size="sm"
-                                    onClick={() => setSelectedCategory(category.id)}
-                                    className={`
-                    ${isSelected
-                                            ? 'bg-gradient-cta hover:opacity-90 text-white border-none'
-                                            : 'border-border hover:border-[#f97316] hover:text-[#f97316]'
-                                        }
-                  `}
-                                >
-                                    <Icon className="w-4 h-4 mr-2" />
-                                    {category.name}
-                                </Button>
+                                <Link key={item.label} href="/dashboard" className="block w-full">
+                                    {Content}
+                                </Link>
                             );
-                        })}
-                    </div>
-                </motion.div>
+                        }
 
-                {/* Results Count */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="flex items-center justify-between mb-6"
-                >
-                    <p className="text-muted-foreground">
-                        {filteredProducts.length} {filteredProducts.length === 1 ? 'automação encontrada' : 'automações encontradas'}
-                    </p>
+                        return (
+                            <button key={item.label} className="w-full">
+                                {Content}
+                            </button>
+                        );
+                    })}
+                </nav>
 
-                    {(searchQuery || selectedCategory !== 'todos') && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                                setSearchQuery('');
-                                setSelectedCategory('todos');
-                            }}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Limpar filtros
-                        </Button>
-                    )}
-                </motion.div>
-
-                {/* Products Grid */}
-                {filteredProducts.length > 0 ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        {filteredProducts.map((product, index) => (
-                            <ProductCard key={product.id} product={product} index={index} />
+                {/* Bottom Stats / Audio Viz Mock */}
+                <div className="mt-auto">
+                    <div className="flex items-end gap-1 h-8 mb-2">
+                        {[40, 70, 30, 80, 50, 90, 20].map((h, i) => (
+                            <div key={i} className="w-1 bg-[#2E5BFF]" style={{ height: `${h}%`, opacity: 0.5 + (i * 0.1) }} />
                         ))}
                     </div>
-                ) : (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-center py-16"
-                    >
-                        <div className="w-20 h-20 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
-                            <Search className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Nenhuma automação encontrada</h3>
-                        <p className="text-muted-foreground mb-6">
-                            Tente ajustar os filtros ou buscar por outros termos.
-                        </p>
-                        <Button
-                            onClick={() => {
-                                setSearchQuery('');
-                                setSelectedCategory('todos');
-                            }}
-                            className="bg-gradient-cta hover:opacity-90 text-white"
-                        >
-                            Ver todas as automações
-                        </Button>
-                    </motion.div>
-                )}
+                    <div className="text-[10px] text-gray-600 font-mono">AUDIO FEED: BRIDGE-01 ACTIVE</div>
 
-                {/* Custom Automation CTA */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="mt-16 bg-gradient-to-r from-card to-muted border border-border rounded-2xl p-8 lg:p-12"
-                >
-                    <div className="grid lg:grid-cols-2 gap-8 items-center">
-                        <div>
-                            <Badge className="bg-[#f97316]/10 text-[#f97316] border-[#f97316]/30 mb-4">
-                                Sob Medida
-                            </Badge>
-                            <h2 className="text-2xl lg:text-3xl font-bold mb-4">
-                                Precisa de algo <span className="text-gradient-orange">personalizado</span>?
-                            </h2>
-                            <p className="text-muted-foreground mb-6">
-                                Se você não encontrou exatamente o que precisa, podemos criar uma automação
-                                exclusiva para o seu negócio. Conte-nos sua necessidade!
-                            </p>
-                            <Button
-                                className="bg-gradient-cta hover:opacity-90 text-white font-semibold"
-                                asChild
-                            >
-                                <a href="mailto:contato@automatize.com.br?subject=Automação Personalizada">
-                                    Solicitar Orçamento
-                                </a>
-                            </Button>
+                    <button className="flex items-center gap-3 mt-6 text-gray-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
+                        <Settings className="w-4 h-4" />
+                        SETTINGS
+                    </button>
+                </div>
+            </aside>
+
+
+            {/* --- MAIN CONTENT --- */}
+            <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
+
+                {/* Header Bar */}
+                <header className="h-24 border-b border-white/10 flex items-center justify-between px-8 bg-[#050505]/95 backdrop-blur z-10 shrink-0">
+                    <div>
+                        <h2 className="font-display text-4xl italic uppercase flex items-center gap-2">
+                            INVENTORY <span className="text-gray-600 not-italic font-light">/</span> <span className="text-[#2E5BFF]">PRODUCTS</span>
+                        </h2>
+                        <p className="text-[10px] text-gray-500 font-mono tracking-widest mt-1">
+                            SELECT COMPONENT FOR EXTRACTION // SESSION 2026.04
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-6">
+                        {/* Filters */}
+                        <div className="flex gap-2">
+                            {['NEURAL', 'LOGIC', 'ALL_SYS'].map((f) => (
+                                <button
+                                    key={f}
+                                    onClick={() => setFilter(f === 'ALL_SYS' ? 'ALL_SYS' : f)} // Just mocking interaction
+                                    className={`px-4 py-1.5 text-xs font-mono font-bold uppercase border transition-all
+                                        ${filter === f || (f === 'ALL_SYS' && filter === 'ALL_SYS')
+                                            ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                                            : 'border-white/20 text-gray-500 hover:border-white/50 hover:text-white'
+                                        }
+                                    `}
+                                >
+                                    {f}
+                                </button>
+                            ))}
                         </div>
-                        <div className="hidden lg:flex justify-center">
-                            <div className="relative">
-                                <div className="w-48 h-48 bg-gradient-cta/20 rounded-full flex items-center justify-center">
-                                    <div className="w-32 h-32 bg-gradient-cta/30 rounded-full flex items-center justify-center">
-                                        <div className="w-16 h-16 bg-gradient-cta rounded-full flex items-center justify-center text-3xl shadow-lg animate-pulse">
-                                            🛠️
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                        {/* Search */}
+                        <div className="relative group">
+                            <Search className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors cursor-pointer" />
+                        </div>
+
+                        {/* Avatar */}
+                        <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/20">
+                            <Users className="w-5 h-5 text-gray-400" />
                         </div>
                     </div>
-                </motion.div>
-            </section>
-        </main>
+                </header>
+
+
+                {/* SCROLLABLE GRID AREA */}
+                <div className="flex-1 overflow-y-auto p-4 lg:p-8 scrollbar-hide">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 pb-20">
+
+                        {filteredProducts.map((product, i) => {
+                            const style = cardStyles[product.category] || cardStyles.operacional;
+                            const Icon = style.icon;
+
+                            return (
+                                <Link href={`/produtos/${product.slug}`} key={product.id} className="block group">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 50 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4, delay: i * 0.1 }}
+                                        className={`min-h-[500px] ${style.bg} relative flex flex-col p-8 transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]`}
+                                    >
+                                        {/* Header */}
+                                        <div className="flex justify-between items-start mb-6 border-b border-black/10 pb-4">
+                                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${style.sub}`}>
+                                                BEBOP-0{i + 1}
+                                            </span>
+                                        </div>
+
+                                        {/* Title Block */}
+                                        <h3 className={`font-display text-5xl leading-[0.85] uppercase mb-2 ${style.text}`}>
+                                            {product.name.split(' ').map((word, w) => (
+                                                <span key={w} className="block">{word}</span>
+                                            ))}
+                                        </h3>
+                                        <div className={`font-japanese text-xl opacity-60 font-bold ${style.text}`}>
+                                            {style.japanese}
+                                        </div>
+
+                                        {/* Center Icon (The "Diamond" or "Square") */}
+                                        <div className="flex-1 flex items-center justify-center my-8">
+                                            <div className="relative w-32 h-32 md:w-40 md:h-40 bg-black/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 rounded-sm">
+                                                {/* Decorative rotated square for some, normal for others to match ref variety */}
+                                                <div className={`absolute inset-0 bg-black ${i % 2 === 0 ? 'rotate-45' : ''}`} />
+                                                <Icon className={`w-16 h-16 ${style.bg} relative z-10`} />
+                                            </div>
+                                        </div>
+
+                                        {/* Footer Arrow */}
+                                        <div className="mt-auto flex justify-end">
+                                            <ArrowRight className={`w-8 h-8 ${style.text} transform group-hover:translate-x-2 transition-transform`} />
+                                        </div>
+
+                                    </motion.div>
+                                </Link>
+                            );
+                        })}
+
+                    </div>
+
+                    {/* Footer text in scroll area */}
+                    <div className="mt-8 flex justify-between items-center text-[10px] font-mono text-gray-600 border-t border-white/10 pt-4">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-blue-500/50" />
+                            DATA LINK: STABLE
+                        </div>
+                        <div>BUFFER: 98%</div>
+                        <div>ENCRYPTION: AES-256-BEBOP</div>
+                        <div className="text-[#2E5BFF]">TANK! . SESSION #01 . 2026</div>
+                    </div>
+                </div>
+            </main>
+        </div>
     );
 }

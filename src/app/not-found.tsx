@@ -24,7 +24,7 @@ export default function NotFound() {
                     </h1>
                     <p className="text-muted-foreground text-lg mb-8">
                         Ops! Parece que essa página não existe ou foi movida.
-                        Mas não se preocupe, temos muitas automações incríveis te esperando!
+                        Mas não se preocupe, temos muitos protocolos DOE incríveis te esperando!
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -44,7 +44,7 @@ export default function NotFound() {
                         >
                             <Link href="/produtos">
                                 <Search className="w-4 h-4 mr-2" />
-                                Ver automações
+                                Ver protocolos DOE
                             </Link>
                         </Button>
                     </div>

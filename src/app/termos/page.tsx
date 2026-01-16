@@ -24,9 +24,10 @@ export default function TermosPage() {
 
                         <h2>2. Descrição dos Serviços</h2>
                         <p>
-                            O Automatize é um marketplace de produtos digitais, especificamente automações
-                            baseadas na plataforma n8n. Oferecemos workflows prontos, materiais educacionais,
-                            templates e suporte para configuração.
+                            O Automatize é um marketplace de produtos digitais, especificamente protocolos
+                            de automação baseados no framework DOE (Directive, Orchestration, Execution).
+                            Oferecemos blueprints completos, materiais educacionais, templates e suporte
+                            para configuração.
                         </p>
 
                         <h2>3. Licença de Uso</h2>

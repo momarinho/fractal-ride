@@ -98,7 +98,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                         {/* Price Tag */}
                         <div className="absolute bottom-0 right-0 p-2 bg-[#0A0A0A] border-l-2 border-t-2 border-white/10">
                             <span className={`text-xl font-display ${styles.text}`}>
-                                R$ {product.price}
+                                {product.priceLabel ?? `R$ ${product.price}`}
                             </span>
                         </div>
                     </div>

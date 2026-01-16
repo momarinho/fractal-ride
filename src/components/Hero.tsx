@@ -36,7 +36,7 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="max-w-md text-xl opacity-80 uppercase font-light tracking-wide font-body text-gray-300"
                     >
-                        The frontier of digital workflow is wild. We provide the tools to navigate it. High-contrast, low-friction automation for the modern drifter.
+                        DOE Framework for agentic automation: Directive, Orchestration, Execution. Reliable systems that turn probabilistic AI into production-ready operations.
                     </motion.p>
 
                     <motion.div

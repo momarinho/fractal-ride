@@ -14,9 +14,9 @@ import Link from 'next/link';
 const steps = [
     {
         session: 'SESSION_01',
-        title: 'TARGET ACQUISITION',
+        title: 'DIRECTIVE BRIEF',
         icon: ShoppingCart,
-        description: 'Scan the database. Locate the automation protocol that fits your operation needs.',
+        description: 'Define the mission in natural language. SOPs, guardrails, and objectives set the semantic boundary.',
         style: {
             bg: 'bg-[#2345bd]',
             border: 'border-[#2345bd]',
@@ -26,10 +26,10 @@ const steps = [
     },
     {
         session: 'SESSION_02',
-        title: 'TRANSACTION',
+        title: 'ORCHESTRATION MAP',
         icon: Download,
         titleColor: 'text-white',
-        description: 'Secure payment gateway. Instant transfer of JSON assets, blueprints and manuals.',
+        description: 'Route tasks, tools, and state. The agent decomposes goals into reliable steps and decision points.',
         style: {
             bg: 'bg-[#ff2e2e]',
             border: 'border-[#ff2e2e]',
@@ -39,9 +39,9 @@ const steps = [
     },
     {
         session: 'SESSION_03',
-        title: 'SYSTEM DEPLOY',
+        title: 'EXECUTION RUN',
         icon: Rocket,
-        description: 'Import protocol to n8n. Configure credentials. Launch operation. Mission Complete.',
+        description: 'Deterministic scripts do the heavy lifting. APIs, databases, and automations run consistently.',
         style: {
             bg: 'bg-[#23bd5a]',
             border: 'border-[#23bd5a]',

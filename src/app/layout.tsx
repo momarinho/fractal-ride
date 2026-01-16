@@ -23,7 +23,7 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata = {
   title: 'BEBOP AUTOMATIONS | Retro-Futuristic Solutions',
-  description: 'High-contrast, low-friction automation for the modern drifter.',
+  description: 'DOE Framework automations for reliable, production-ready agentic systems.',
 };
 
 export default function RootLayout({

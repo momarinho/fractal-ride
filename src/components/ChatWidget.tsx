@@ -24,7 +24,7 @@ const initialMessages: Message[] = [
         role: 'bot',
         text: '👋 Oi! Sou o assistente do Automatize. Como posso ajudar você hoje?',
         options: [
-            'Tenho dúvida sobre uma automação',
+            'Tenho dúvida sobre um protocolo DOE',
             'Como funciona a entrega?',
             'Preciso de suporte técnico',
             'Quero falar com humano'
@@ -34,10 +34,10 @@ const initialMessages: Message[] = [
 
 // Respostas automáticas baseadas em palavras-chave
 const responses: { [key: string]: Message } = {
-    'dúvida sobre uma automação': {
+    'dúvida sobre um protocolo doe': {
         role: 'bot',
-        text: 'Qual automação te interessa? Posso te dar detalhes sobre qualquer uma delas! 🚀',
-        options: ['Point Control (RH)', 'LinkedIn Pro (Vendas)', 'Auto Post Social (Marketing)', 'Ver todas automações']
+        text: 'Qual protocolo DOE te interessa? Posso te dar detalhes sobre qualquer um deles! 🚀',
+        options: ['Point Control (RH)', 'LinkedIn Pro (Vendas)', 'Auto Post Social (Marketing)', 'Ver todos protocolos DOE']
     },
     'como funciona a entrega': {
         role: 'bot',
@@ -48,13 +48,13 @@ const responses: { [key: string]: Message } = {
 3️⃣ Área de membros com todos os arquivos
 
 📦 Você recebe:
-• Workflow n8n (JSON)
-• Guia PDF completo
-• Vídeos tutoriais
-• Templates prontos
+• Diretiva (SOPs + guardrails)
+• Orquestração (mapas, roteiros e fluxos)
+• Execução (scripts determinísticos)
+• Guias e vídeos de implementação
 
 Tem garantia de 7 dias! Alguma outra dúvida?`,
-        options: ['Como instalar o workflow?', 'Preciso saber programar?', 'Ver automações']
+        options: ['Como colocar no ar?', 'Preciso saber programar?', 'Ver protocolos DOE']
     },
     'suporte técnico': {
         role: 'bot',
@@ -80,14 +80,14 @@ Para falar com nossa equipe:
 Respondemos em até 24h (normalmente muito antes!).
 
 Enquanto isso, posso te ajudar com alguma informação?`,
-        options: ['Ver automações', 'Ver FAQ', 'Voltar ao início']
+        options: ['Ver protocolos DOE', 'Ver FAQ', 'Voltar ao início']
     },
     'point control': {
         role: 'bot',
         text: `**Point Control** - Controle de Ponto Automatizado 🕐
 
 📦 O que você recebe:
-• Workflow n8n completo
+• Blueprint DOE completo (Directive + Orchestration + Execution)
 • Guia PDF 30 páginas
 • 5 vídeos tutoriais
 • Dashboard pronto
@@ -96,14 +96,14 @@ Enquanto isso, posso te ajudar com alguma informação?`,
 🏆 Ideal para: Empresas com 5-50 funcionários
 
 É nosso produto mais vendido! Quer saber mais?`,
-        options: ['Quero comprar', 'Como instalar?', 'Ver outros produtos']
+        options: ['Quero comprar', 'Como colocar no ar?', 'Ver outros produtos']
     },
     'linkedin pro': {
         role: 'bot',
         text: `**LinkedIn Pro** - Prospecção Automatizada 🔗
 
 📦 O que você recebe:
-• Workflow n8n completo  
+• Blueprint DOE completo (Directive + Orchestration + Execution)  
 • 8 templates de mensagens
 • 50 ganchos de abertura testados
 • Planilha de tracking
@@ -119,7 +119,7 @@ Perfeito para vendedores B2B! Alguma dúvida?`,
         text: `**Auto Post Social** - Gestão de Redes Sociais 📱
 
 📦 O que você recebe:
-• Workflow n8n completo
+• Blueprint DOE completo (Directive + Orchestration + Execution)
 • 100 templates de posts
 • Calendário de conteúdo
 • Guia de estratégia
@@ -130,63 +130,73 @@ Perfeito para vendedores B2B! Alguma dúvida?`,
 Economia de 10h+ por semana! Interesse?`,
         options: ['Quero comprar', 'Funciona com todas as redes?', 'Ver outros produtos']
     },
-    'instalar': {
+    'colocar no ar': {
         role: 'bot',
-        text: `Instalar é super simples! 5 passos:
+        text: `Colocar no ar é super simples! 5 passos:
 
-1️⃣ Crie conta gratuita no n8n.cloud
-2️⃣ Importe o arquivo JSON (1 clique)
-3️⃣ Configure suas credenciais (seguindo o vídeo)
-4️⃣ Ative o workflow
-5️⃣ Pronto! 🎉
+1️⃣ Alinhe a diretiva (objetivos + dados)
+2️⃣ Conecte credenciais das ferramentas
+3️⃣ Rode os scripts de execução
+4️⃣ Ative monitoramento e métricas
+5️⃣ Ajuste fino com o playbook 🎉
 
 Tempo médio: 15-30 minutos
 Não precisa saber programar!
 
-Os vídeos mostram cada clique. Mais alguma dúvida?`,
-        options: ['O que é n8n?', 'Ver automações', 'Voltar ao início']
+Os vídeos mostram cada etapa. Mais alguma dúvida?`,
+        options: ['O que é DOE?', 'Ver protocolos DOE', 'Voltar ao início']
+    },
+    'instalar': {
+        role: 'bot',
+        text: `Colocar no ar é super simples! 5 passos:
+
+1️⃣ Alinhe a diretiva (objetivos + dados)
+2️⃣ Conecte credenciais das ferramentas
+3️⃣ Rode os scripts de execução
+4️⃣ Ative monitoramento e métricas
+5️⃣ Ajuste fino com o playbook 🎉
+
+Tempo médio: 15-30 minutos
+Não precisa saber programar!
+
+Os vídeos mostram cada etapa. Mais alguma dúvida?`,
+        options: ['O que é DOE?', 'Ver protocolos DOE', 'Voltar ao início']
     },
     'programar': {
         role: 'bot',
         text: `**Não precisa saber programar!** 🙌
 
-O n8n é 100% visual (arrasta e solta). 
-
-Nossas automações já vêm prontas — você só:
-✅ Importa o arquivo
-✅ Configura suas credenciais (API keys, etc)
-✅ Ativa
+Nossos protocolos DOE já vêm prontos — você só:
+✅ Define objetivos e dados
+✅ Conecta credenciais (APIs, etc)
+✅ Executa e monitora
 
 Os vídeos mostram cada passo. Se travar, o suporte ajuda!`,
-        options: ['O que é n8n?', 'Como funciona a entrega?', 'Ver automações']
+        options: ['O que é DOE?', 'Como funciona a entrega?', 'Ver protocolos DOE']
     },
-    'n8n': {
+    'doe': {
         role: 'bot',
-        text: `**n8n** é uma plataforma de automação (como Zapier ou Make), mas:
+        text: `**DOE Framework** (Directive, Orchestration, Execution) é uma arquitetura para transformar IA em automações confiáveis:
 
-🆓 Versão gratuita muito generosa
-💪 Muito mais poderosa
-🔓 Open source
+🧠 Directive: objetivos, SOPs e guardrails
+🧭 Orchestration: roteamento, estado e decisões
+⚙️ Execution: scripts determinísticos para APIs e dados
 
-Você pode usar:
-• n8n.cloud (mais fácil, tem plano grátis)
-• Self-hosted (instala no seu servidor)
-
-Nossas automações funcionam em ambos!`,
-        options: ['Ver automações', 'Como instalar?', 'Voltar ao início']
+É o jeito mais seguro de levar agentes para produção.`,
+        options: ['Ver protocolos DOE', 'Como colocar no ar?', 'Voltar ao início']
     },
     'default': {
         role: 'bot',
         text: `Hmm, não tenho certeza se entendi. 🤔
 
 Posso te ajudar com:
-• Informações sobre automações
+• Informações sobre protocolos DOE
 • Como funciona a entrega
 • Suporte técnico
 • Falar com nossa equipe
 
 O que prefere?`,
-        options: ['Ver automações', 'Como funciona?', 'Suporte', 'Falar com humano']
+        options: ['Ver protocolos DOE', 'Como funciona?', 'Suporte', 'Falar com humano']
     }
 };
 
@@ -219,7 +229,7 @@ export default function ChatWidget() {
             return {
                 role: 'bot',
                 text: 'Para comprar, é só acessar a página do produto e clicar em "Comprar Agora". O pagamento é processado pela Kiwify (PIX, cartão ou boleto) e a entrega é imediata! 🛒',
-                options: ['Ver automações', 'Como funciona a entrega?']
+                options: ['Ver protocolos DOE', 'Como funciona a entrega?']
             };
         }
 
@@ -227,7 +237,7 @@ export default function ChatWidget() {
             return {
                 role: 'bot',
                 text: '🛡️ Oferecemos **7 dias de garantia incondicional**!\n\nSe por qualquer motivo você não ficar satisfeito, basta enviar um email e devolvemos 100% do valor. Sem perguntas, sem burocracia.',
-                options: ['Ver automações', 'Voltar ao início']
+                options: ['Ver protocolos DOE', 'Voltar ao início']
             };
         }
 

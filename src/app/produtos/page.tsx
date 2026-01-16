@@ -206,7 +206,7 @@ export default function ProductsPage() {
                                         initial={{ opacity: 0, y: 50 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.4, delay: i * 0.1 }}
-                                        className={`min-h-[500px] ${style.bg} relative flex flex-col p-8 transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]`}
+                                        className={`min-h-[420px] sm:min-h-[460px] lg:min-h-[500px] ${style.bg} relative flex flex-col p-6 sm:p-7 lg:p-8 transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]`}
                                     >
                                         {/* Header */}
                                         <div className="flex justify-between items-start mb-6 border-b border-black/10 pb-4">
@@ -216,7 +216,7 @@ export default function ProductsPage() {
                                         </div>
 
                                         {/* Title Block */}
-                                        <h3 className={`font-display text-5xl leading-[0.85] uppercase mb-2 ${style.text}`}>
+                                        <h3 className={`font-display text-3xl sm:text-4xl lg:text-5xl leading-[0.9] uppercase mb-2 break-words text-balance ${style.text}`}>
                                             {product.name.split(' ').map((word, w) => (
                                                 <span key={w} className="block">{word}</span>
                                             ))}
@@ -226,11 +226,11 @@ export default function ProductsPage() {
                                         </div>
 
                                         {/* Center Icon (The "Diamond" or "Square") */}
-                                        <div className="flex-1 flex items-center justify-center my-8">
-                                            <div className="relative w-32 h-32 md:w-40 md:h-40 bg-black/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 rounded-sm">
+                                        <div className="flex-1 flex items-center justify-center my-6 sm:my-8">
+                                            <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-black/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 rounded-sm">
                                                 {/* Decorative rotated square for some, normal for others to match ref variety */}
                                                 <div className={`absolute inset-0 bg-black ${i % 2 === 0 ? 'rotate-45' : ''}`} />
-                                                <Icon className={`w-16 h-16 ${style.bg} relative z-10`} />
+                                                <Icon className={`w-12 h-12 sm:w-16 sm:h-16 ${style.bg} relative z-10`} />
                                             </div>
                                         </div>
 

@@ -20,6 +20,9 @@ export const translations = {
             fee: 'Investimento',
             viewDetails: 'Ver Detalhes',
             buyNow: 'Comprar Agora',
+            inventory: 'INVENTÁRIO',
+            search: 'Buscar...',
+            noResults: 'Nenhum produto encontrado',
         },
         // Why Section
         why: {
@@ -92,6 +95,9 @@ export const translations = {
             fee: 'Investment',
             viewDetails: 'View Details',
             buyNow: 'Buy Now',
+            inventory: 'INVENTORY',
+            search: 'Search...',
+            noResults: 'No products found',
         },
         // Why Section
         why: {

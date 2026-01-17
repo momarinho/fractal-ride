@@ -10,9 +10,12 @@ import {
     Users,
     TrendingUp,
     Megaphone,
-    Calculator
+    Calculator,
+    Home,
+    X
 } from 'lucide-react';
 import { products } from '@/lib/products';
+import { useTranslation } from '@/lib/i18n';
 
 // --- Configuration & Mocks ---
 
@@ -55,6 +58,8 @@ const cardStyles: { [key: string]: { bg: string; text: string; sub: string; icon
 export default function ProductsPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState('ALL_SYS');
+    const [showSearch, setShowSearch] = useState(false);
+    const t = useTranslation();
 
     // Filter Logic
     const filteredProducts = products.filter(p => {
@@ -69,15 +74,23 @@ export default function ProductsPage() {
             {/* --- SIDEBAR --- */}
             <aside className="hidden lg:flex w-64 flex-col border-r border-white/10 pt-8 pb-6 px-6 relative z-20 bg-[#050505]">
                 {/* Brand */}
-                <div className="mb-12">
-                    <div className="flex items-center gap-2 mb-1 text-[#2E5BFF] animate-pulse">
-                        <div className="w-2 h-2 rounded-full bg-[#2E5BFF]" />
-                        <span className="text-[10px] font-mono tracking-widest">SYSTEM: ONLINE</span>
-                    </div>
-                    <h1 className="font-display text-2xl leading-none text-white uppercase">
-                        BEBOP<br />AUTOMATIONS
-                    </h1>
+                <div className="mb-8">
+                    <Link href="/" className="block group">
+                        <div className="flex items-center gap-2 mb-1 text-[#2E5BFF] animate-pulse">
+                            <div className="w-2 h-2 rounded-full bg-[#2E5BFF]" />
+                            <span className="text-[10px] font-mono tracking-widest">SYSTEM: ONLINE</span>
+                        </div>
+                        <h1 className="font-display text-2xl leading-none text-white uppercase group-hover:text-[#E9C46A] transition-colors">
+                            DOE<br />FRAMEWORK
+                        </h1>
+                    </Link>
                 </div>
+
+                {/* Home Link */}
+                <Link href="/" className="flex items-center gap-3 mb-6 text-gray-500 hover:text-[#E9C46A] transition-colors">
+                    <Home className="w-5 h-5" />
+                    <span className="text-xs font-bold uppercase tracking-widest">{t.nav.home}</span>
+                </Link>
 
                 {/* Navigation */}
                 <nav className="flex-1 space-y-6">
@@ -124,7 +137,7 @@ export default function ProductsPage() {
                 <header className="h-16 sm:h-24 border-b border-white/10 flex items-center justify-between px-4 sm:px-8 bg-[#050505]/95 backdrop-blur z-10 shrink-0">
                     <div>
                         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl italic uppercase flex items-center gap-2">
-                            INVENTORY <span className="text-gray-600 not-italic font-light">/</span> <span className="text-[#2E5BFF]">PRODUCTS</span>
+                            {t.products.inventory} <span className="text-gray-600 not-italic font-light">/</span> <span className="text-[#2E5BFF]">{t.nav.products.toUpperCase()}</span>
                         </h2>
                         <p className="text-[9px] sm:text-[10px] text-gray-500 font-mono tracking-widest mt-1 hidden sm:block">
                             SELECT COMPONENT FOR EXTRACTION // SESSION 2026.04
@@ -151,14 +164,36 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Search */}
-                        <div className="relative group">
-                            <Search className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors cursor-pointer" />
+                        <div className="relative flex items-center">
+                            {showSearch && (
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t.products.search}
+                                    className="bg-transparent border border-white/20 px-3 py-1.5 text-xs font-mono text-white placeholder-gray-500 focus:border-[#E9C46A] focus:outline-none w-32 sm:w-48"
+                                    autoFocus
+                                />
+                            )}
+                            <button
+                                onClick={() => {
+                                    if (showSearch && searchQuery) {
+                                        setSearchQuery('');
+                                    }
+                                    setShowSearch(!showSearch);
+                                }}
+                                className="p-2 text-gray-500 hover:text-white transition-colors"
+                            >
+                                {showSearch ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+                            </button>
                         </div>
 
-                        {/* Avatar */}
-                        <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/20">
-                            <Users className="w-5 h-5 text-gray-400" />
-                        </div>
+                        {/* Home Button (Mobile) */}
+                        <Link href="/" className="lg:hidden">
+                            <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center border border-white/20 hover:border-[#E9C46A] transition-colors">
+                                <Home className="w-5 h-5 text-gray-400" />
+                            </div>
+                        </Link>
                     </div>
                 </header>
 

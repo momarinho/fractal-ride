@@ -268,58 +268,66 @@ export default function ChatWidget() {
         setInput('');
         setIsTyping(true);
 
-        await new Promise(resolve => setTimeout(resolve, 400));
-
-        const { response, wasLearned, learnedFrom } = findResponse(messageText);
-
-        // Check if we need to trigger self-annealing
         const lowerText = messageText.toLowerCase().trim();
-        const isUnknown = response.text.includes('COMMAND NOT RECOGNIZED');
 
-        if (isUnknown) {
-            // SELF-ANNEALING TRIGGERED
-            const closestKey = findClosestKey(messageText);
+        // Check for Self-Annealing demo trigger (special keywords)
+        const selfAnnealingTriggers = ['self-annealing', 'auto-correção', 'self annealing', 'annealing'];
+        const isSelfAnnealingDemo = selfAnnealingTriggers.some(t => lowerText.includes(t));
 
-            if (closestKey) {
-                // Show annealing process
-                const annealingMsg: Message = {
-                    role: 'system',
-                    text: `⚡ SELF-ANNEALING TRIGGERED
-━━━━━━━━━━━━━━━━━━━━━━━━
-> Analyzing input pattern...
-> Closest match found: "${closestKey}"
-> Learning association: "${lowerText}" → "${closestKey}"
-> Updating knowledge base...
-━━━━━━━━━━━━━━━━━━━━━━━━
-✓ ANNEALING COMPLETE`
-                };
-                setMessages(prev => [...prev, annealingMsg]);
+        if (isSelfAnnealingDemo && !learnedKeywords['self-annealing-demo']) {
+            // Show Self-Annealing demo
+            await new Promise(resolve => setTimeout(resolve, 500));
 
-                // Learn the new keyword
-                setLearnedKeywords(prev => ({ ...prev, [lowerText]: closestKey }));
-                setAnnealingCount(prev => prev + 1);
-
-                await new Promise(resolve => setTimeout(resolve, 800));
-
-                // Now provide the correct response
-                const learnedResponse = baseResponses[closestKey];
-                setMessages(prev => [...prev, learnedResponse]);
-                setIsTyping(false);
-                return;
-            }
-        }
-
-        // If it was a previously learned keyword, show a note
-        if (wasLearned && learnedFrom) {
-            const recallMsg: Message = {
+            const demoMsg: Message = {
                 role: 'system',
-                text: `🧠 RECALL: Using learned association → "${learnedFrom}"`
+                text: `⚡ SELF-ANNEALING DEMONSTRATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+> Simulating error detection...
+> Error: Selector '#old-element' not found
+> Analyzing new DOM structure...
+> LLM Analysis: Element moved to '[data-id="new"]'
+> Applying surgical patch...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ SELF-HEALING COMPLETE
+
+This is how our agents fix themselves automatically when websites change layouts or selectors break.`
             };
-            setMessages(prev => [...prev, recallMsg]);
-            await new Promise(resolve => setTimeout(resolve, 300));
+            setMessages(prev => [...prev, demoMsg]);
+            setLearnedKeywords(prev => ({ ...prev, 'self-annealing-demo': 'shown' }));
+            setAnnealingCount(prev => prev + 1);
+            setIsTyping(false);
+            return;
         }
 
-        setMessages(prev => [...prev, response]);
+        try {
+            // Call the LLM API
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: messageText,
+                    history: messages.slice(-6).map(m => ({ role: m.role, text: m.text }))
+                })
+            });
+
+            if (!response.ok) throw new Error('API error');
+
+            const data = await response.json();
+
+            const botMessage: Message = {
+                role: 'bot',
+                text: data.answer || 'I apologize, I could not process your request. Please try again.'
+            };
+
+            setMessages(prev => [...prev, botMessage]);
+        } catch (error) {
+            console.error('Chat error:', error);
+
+            // Fallback to local response
+            const { response } = findResponse(messageText);
+            setMessages(prev => [...prev, response]);
+        }
+
         setIsTyping(false);
     };
 

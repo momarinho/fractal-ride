@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, RotateCcw, Terminal, CheckCircle, XCircle, Zap, Loader2 } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 
 interface LogLine {
     text: string;
@@ -64,6 +65,7 @@ export default function SelfAnnealingDemo() {
     const [logs, setLogs] = useState<LogLine[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
     const terminalRef = useRef<HTMLDivElement>(null);
+    const t = useTranslation();
 
     useEffect(() => {
         if (isRunning && currentStep < simulationSteps.length) {
@@ -123,11 +125,10 @@ export default function SelfAnnealingDemo() {
                         LIVE DEMONSTRATION
                     </div>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4">
-                        Self-Annealing in Action
+                        {t.demo.title}
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base px-4">
-                        Watch how a DOE agent detects a broken selector, analyzes the new DOM structure with an LLM,
-                        patches its own code, and continues running — all without human intervention.
+                        {t.demo.subtitle}
                     </p>
                 </div>
 
@@ -214,7 +215,7 @@ export default function SelfAnnealingDemo() {
                                 className="px-3 py-1.5 text-xs border border-white/20 text-gray-400 hover:border-white/40 hover:text-white disabled:opacity-30 transition-colors flex items-center gap-1"
                             >
                                 <RotateCcw className="w-3 h-3" />
-                                Reset
+                                {t.demo.reset}
                             </button>
                             <button
                                 onClick={startSimulation}
@@ -222,7 +223,7 @@ export default function SelfAnnealingDemo() {
                                 className="px-4 py-1.5 text-xs bg-[#E9C46A] text-black font-bold hover:bg-[#d4af37] disabled:opacity-30 transition-colors flex items-center gap-1"
                             >
                                 <Play className="w-3 h-3" />
-                                Run
+                                {t.demo.runSimulation}
                             </button>
                         </div>
                     </div>
@@ -232,18 +233,18 @@ export default function SelfAnnealingDemo() {
                 <div className="grid md:grid-cols-3 gap-4 mt-8">
                     <div className="bg-[#050505] border border-white/10 p-4">
                         <div className="text-red-400 text-2xl mb-2">01</div>
-                        <h3 className="text-white font-bold mb-1">Detect</h3>
-                        <p className="text-gray-500 text-sm">Agent catches runtime errors and captures full context</p>
+                        <h3 className="text-white font-bold mb-1">{t.demo.detect}</h3>
+                        <p className="text-gray-500 text-sm">{t.demo.detectDesc}</p>
                     </div>
                     <div className="bg-[#050505] border border-white/10 p-4">
                         <div className="text-[#E9C46A] text-2xl mb-2">02</div>
-                        <h3 className="text-white font-bold mb-1">Analyze</h3>
-                        <p className="text-gray-500 text-sm">LLM identifies root cause and generates surgical fix</p>
+                        <h3 className="text-white font-bold mb-1">{t.demo.analyze}</h3>
+                        <p className="text-gray-500 text-sm">{t.demo.analyzeDesc}</p>
                     </div>
                     <div className="bg-[#050505] border border-white/10 p-4">
                         <div className="text-green-400 text-2xl mb-2">03</div>
-                        <h3 className="text-white font-bold mb-1">Heal</h3>
-                        <p className="text-gray-500 text-sm">Patch is applied, build retried, system hardens</p>
+                        <h3 className="text-white font-bold mb-1">{t.demo.heal}</h3>
+                        <p className="text-gray-500 text-sm">{t.demo.healDesc}</p>
                     </div>
                 </div>
             </div>

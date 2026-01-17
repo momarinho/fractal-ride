@@ -6,8 +6,11 @@ import FAQ from '@/components/FAQ';
 import SelfAnnealingDemo from '@/components/SelfAnnealingDemo';
 import { Calculator, Database, FileText, BookOpen } from 'lucide-react';
 import { faqs } from '@/lib/products';
+import { useTranslation } from '@/lib/i18n';
 
 export default function Home() {
+  const t = useTranslation();
+
   const featuredProducts = [
     {
       id: '01',
@@ -62,9 +65,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <Hero
-        title="DOE Framework"
-        subtitle="Build reliable AI agents with Python & Zed. From $50 tools to $5000 enterprise solutions."
-        ctaText="Explore Modules"
+        title={t.hero.title}
+        subtitle={t.hero.subtitle}
+        ctaText={t.hero.cta}
         ctaLink="#products"
       />
 
@@ -72,36 +75,36 @@ export default function Home() {
         <FeaturedProducts products={featuredProducts} />
       </div>
 
-      <section className="py-20 px-4 bg-gray-950">
+      <section className="py-12 md:py-20 px-4 bg-gray-950">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-white">Why Abandon n8n?</h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="flex gap-6">
-              <div className="text-3xl text-pink-500">🧬</div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-white">{t.why.title}</h2>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+            <div className="flex gap-4 md:gap-6">
+              <div className="text-2xl md:text-3xl text-pink-500">🧬</div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">Complex State Management</h3>
-                <p className="text-gray-400 leading-relaxed">Visual nodes become spaghetti when handling complex, looping conversations or multi-step reasoning. Python handles state elegantly.</p>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">{t.why.stateManagement.title}</h3>
+                <p className="text-gray-400 leading-relaxed text-sm md:text-base">{t.why.stateManagement.desc}</p>
               </div>
             </div>
-            <div className="flex gap-6">
-              <div className="text-3xl text-blue-500">🛡️</div>
+            <div className="flex gap-4 md:gap-6">
+              <div className="text-2xl md:text-3xl text-blue-500">🛡️</div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">Self-Annealing Reliability</h3>
-                <p className="text-gray-400 leading-relaxed">DOE agents fix themselves. If a step fails, they retry with new context or strategy, something hard to wire visually.</p>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">{t.why.selfAnnealing.title}</h3>
+                <p className="text-gray-400 leading-relaxed text-sm md:text-base">{t.why.selfAnnealing.desc}</p>
               </div>
             </div>
-            <div className="flex gap-6">
-              <div className="text-3xl text-yellow-500">🚀</div>
+            <div className="flex gap-4 md:gap-6">
+              <div className="text-2xl md:text-3xl text-yellow-500">🚀</div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">Performance & Control</h3>
-                <p className="text-gray-400 leading-relaxed">No overhead. Direct API calls, local file processing, and custom logic without the constraints of a no-code platform.</p>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">{t.why.performance.title}</h3>
+                <p className="text-gray-400 leading-relaxed text-sm md:text-base">{t.why.performance.desc}</p>
               </div>
             </div>
-            <div className="flex gap-6">
-              <div className="text-3xl text-green-500">💰</div>
+            <div className="flex gap-4 md:gap-6">
+              <div className="text-2xl md:text-3xl text-green-500">💰</div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">High-Value Deliverables</h3>
-                <p className="text-gray-400 leading-relaxed">Sell outcomes, not workflows. From $50 tools to $5000 enterprise research dossiers, build assets that scale.</p>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">{t.why.deliverables.title}</h3>
+                <p className="text-gray-400 leading-relaxed text-sm md:text-base">{t.why.deliverables.desc}</p>
               </div>
             </div>
           </div>

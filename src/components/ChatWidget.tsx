@@ -8,7 +8,8 @@ import {
     Send,
     Cpu,
     Loader2,
-    Zap
+    Zap,
+    GripVertical
 } from 'lucide-react';
 
 interface Message {
@@ -328,11 +329,16 @@ export default function ChatWidget() {
             <AnimatePresence>
                 {!isOpen && (
                     <motion.button
+                        drag
+                        dragMomentum={false}
+                        dragElastic={0.1}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
+                        whileDrag={{ scale: 1.1, cursor: 'grabbing' }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-black border border-white/20 hover:border-[#E9C46A] shadow-lg flex items-center justify-center group transition-colors"
+                        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-black border border-white/20 hover:border-[#E9C46A] shadow-lg flex items-center justify-center group transition-colors cursor-grab active:cursor-grabbing"
+                        style={{ touchAction: 'none' }}
                     >
                         <Terminal className="w-5 h-5 text-gray-400 group-hover:text-[#E9C46A] transition-colors" />
                         <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#E9C46A] rounded-full animate-pulse" />
@@ -344,14 +350,19 @@ export default function ChatWidget() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        drag
+                        dragMomentum={false}
+                        dragElastic={0.05}
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[350px] md:w-[400px] h-[70vh] sm:h-[500px] bg-[#050505] border-t sm:border border-white/20 shadow-2xl flex flex-col overflow-hidden font-mono text-xs"
+                        style={{ touchAction: 'none' }}
                     >
-                        {/* Header */}
-                        <div className="bg-[#0A0A0A] border-b border-white/10 p-3 flex items-center justify-between">
+                        {/* Header - Draggable area */}
+                        <div className="bg-[#0A0A0A] border-b border-white/10 p-3 flex items-center justify-between cursor-grab active:cursor-grabbing">
                             <div className="flex items-center gap-2">
+                                <GripVertical className="w-4 h-4 text-gray-600" />
                                 <Cpu className="w-4 h-4 text-[#E9C46A]" />
                                 <span className="text-gray-400 font-bold tracking-widest uppercase text-[10px] sm:text-xs">DOE_AGENT</span>
                                 {annealingCount > 0 && (
@@ -431,7 +442,7 @@ export default function ChatWidget() {
                         </div>
                     </motion.div>
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     );
 }

@@ -3,8 +3,8 @@ export const translations = {
         // Hero
         hero: {
             title: 'DOE Framework',
-            subtitle: 'Construa agentes de IA confiáveis com Python & Zed. De ferramentas de $50 a soluções enterprise de $5000.',
-            cta: 'Explorar Módulos',
+            subtitle: 'Sistemas de automação autônomos com Self-Annealing. Agentes que se corrigem sozinhos.',
+            cta: 'Ver Módulos',
         },
         // Navigation
         nav: {
@@ -78,8 +78,8 @@ export const translations = {
         // Hero
         hero: {
             title: 'DOE Framework',
-            subtitle: 'Build reliable AI agents with Python & Zed. From $50 tools to $5000 enterprise solutions.',
-            cta: 'Explore Modules',
+            subtitle: 'Autonomous automation systems with Self-Annealing. AI agents that fix themselves.',
+            cta: 'View Modules',
         },
         // Navigation
         nav: {

@@ -185,8 +185,8 @@ export default function CheckoutPage() {
                         </Link>
 
                         <p className="text-center text-[8px] uppercase text-[#5A4A42] opacity-60 mt-6 font-mono leading-relaxed">
-                            I THINK IT'S TIME WE BLOW THIS SCENE. GET EVERYBODY AND THE STUFF TOGETHER. OK, THREE, TWO, ONE LET'S JAM!
-                            <br />© 2071 BEBOP AUTOMATIONS - SOLAR SYSTEM TERRITORIAL AUTHORITY
+                            AUTONOMOUS SYSTEMS. SELF-ANNEALING AGENTS. PRODUCTION-READY AUTOMATION.
+                            <br />© 2026 BEBOP AUTOMATIONS - ALL SYSTEMS OPERATIONAL
                         </p>
                     </div>
 

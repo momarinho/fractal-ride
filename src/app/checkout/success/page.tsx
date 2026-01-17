@@ -102,14 +102,14 @@ export default function SuccessPage() {
             </div>
 
 
-            {/* --- SEE YOU SPACE COWBOY TEXT --- */}
+            {/* --- SIGNATURE TEXT --- */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.0, duration: 1.5 }}
                 className="fixed bottom-8 right-8 md:right-40 lg:right-56 z-30 font-serif italic text-2xl md:text-4xl text-white drop-shadow-md select-none"
             >
-                SEE YOU SPACE COWBOY...
+                SEE YOU AUTOMATA COWBOY...
             </motion.div>
 
         </div>

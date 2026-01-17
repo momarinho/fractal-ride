@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Project internal docs
+.PROJECT_STATUS.md
+
+# Self-Annealing
+scripts/anneal_logs/
+*.bak.*

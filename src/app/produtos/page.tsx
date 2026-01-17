@@ -4,70 +4,51 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
-    LayoutGrid,
     Package,
-    Target, // Use Target for 'Bounties' icon (Crosshair style)
-    Radio,
-    Settings,
     Search,
     ArrowRight,
     Users,
     TrendingUp,
     Megaphone,
-    Calculator,
-    Cpu,
-    Database,
-    Zap,
-    Shield
+    Calculator
 } from 'lucide-react';
 import { products } from '@/lib/products';
 
 // --- Configuration & Mocks ---
 
 const sidebarItems = [
-    { icon: LayoutGrid, label: 'DASHBOARD', active: false },
-    { icon: Package, label: 'WAREHOUSE', active: true }, // Active page
-    { icon: Target, label: 'BOUNTIES', active: false },
-    { icon: Radio, label: 'COMMUNICATIONS', active: false },
+    { icon: Package, label: 'WAREHOUSE', active: true },
 ];
 
 // Mapping categories to the massive color cards style
-// Using the reference colors: Yellow, Blue, Red, Green
 const cardStyles: { [key: string]: { bg: string; text: string; sub: string; icon: any; japanese: string } } = {
-    rh: {
-        bg: 'bg-[#E9C46A]', // Yellow
-        text: 'text-black',
-        sub: 'text-black/60',
-        icon: Users,
-        japanese: 'ニューラル' // Neural
-    },
-    vendas: {
-        bg: 'bg-[#2E5BFF]', // Cobalt Blue
-        text: 'text-white',
-        sub: 'text-white/60',
-        icon: TrendingUp,
-        japanese: '同期' // Sync
-    },
-    marketing: {
+    neural: {
         bg: 'bg-[#E63946]', // Red
         text: 'text-white',
         sub: 'text-white/60',
-        icon: Megaphone,
-        japanese: 'ボイド' // Void
+        icon: Users,
+        japanese: 'ニューラル'
     },
-    financeiro: {
-        bg: 'bg-[#2A9D8F]', // Green (Reference is darker, but keeping our palette cohesion)
+    sync: {
+        bg: 'bg-[#2A9D8F]', // Green
         text: 'text-white',
-        sub: 'text-white/60', // Darker text for contrast on teal
-        icon: Calculator,
-        japanese: 'キネティック' // Kinetic
+        sub: 'text-white/60',
+        icon: TrendingUp,
+        japanese: '同期'
     },
-    operacional: {
-        bg: 'bg-[#F4F4F4]',
+    kinetic: {
+        bg: 'bg-[#E9C46A]', // Yellow
         text: 'text-black',
         sub: 'text-black/60',
-        icon: Settings,
-        japanese: 'オペレー' // Ops
+        icon: Calculator,
+        japanese: 'キネティック'
+    },
+    void: {
+        bg: 'bg-[#2E5BFF]', // Blue
+        text: 'text-white',
+        sub: 'text-white/60',
+        icon: Megaphone,
+        japanese: 'ボイド'
     }
 };
 
@@ -129,19 +110,9 @@ export default function ProductsPage() {
                     })}
                 </nav>
 
-                {/* Bottom Stats / Audio Viz Mock */}
+                {/* Footer */}
                 <div className="mt-auto">
-                    <div className="flex items-end gap-1 h-8 mb-2">
-                        {[40, 70, 30, 80, 50, 90, 20].map((h, i) => (
-                            <div key={i} className="w-1 bg-[#2E5BFF]" style={{ height: `${h}%`, opacity: 0.5 + (i * 0.1) }} />
-                        ))}
-                    </div>
-                    <div className="text-[10px] text-gray-600 font-mono">AUDIO FEED: BRIDGE-01 ACTIVE</div>
-
-                    <button className="flex items-center gap-3 mt-6 text-gray-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
-                        <Settings className="w-4 h-4" />
-                        SETTINGS
-                    </button>
+                    <div className="text-[10px] text-gray-600 font-mono">DOE FRAMEWORK v1.0</div>
                 </div>
             </aside>
 
@@ -150,24 +121,24 @@ export default function ProductsPage() {
             <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
 
                 {/* Header Bar */}
-                <header className="h-24 border-b border-white/10 flex items-center justify-between px-8 bg-[#050505]/95 backdrop-blur z-10 shrink-0">
+                <header className="h-16 sm:h-24 border-b border-white/10 flex items-center justify-between px-4 sm:px-8 bg-[#050505]/95 backdrop-blur z-10 shrink-0">
                     <div>
-                        <h2 className="font-display text-4xl italic uppercase flex items-center gap-2">
+                        <h2 className="font-display text-2xl sm:text-3xl md:text-4xl italic uppercase flex items-center gap-2">
                             INVENTORY <span className="text-gray-600 not-italic font-light">/</span> <span className="text-[#2E5BFF]">PRODUCTS</span>
                         </h2>
-                        <p className="text-[10px] text-gray-500 font-mono tracking-widest mt-1">
+                        <p className="text-[9px] sm:text-[10px] text-gray-500 font-mono tracking-widest mt-1 hidden sm:block">
                             SELECT COMPONENT FOR EXTRACTION // SESSION 2026.04
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        {/* Filters */}
-                        <div className="flex gap-2">
-                            {['NEURAL', 'LOGIC', 'ALL_SYS'].map((f) => (
+                    <div className="flex items-center gap-3 sm:gap-6">
+                        {/* Filters - Hidden on small mobile */}
+                        <div className="hidden sm:flex gap-1 md:gap-2 overflow-x-auto">
+                            {['NEURAL', 'SYNC', 'KINETIC', 'VOID', 'ALL_SYS'].map((f) => (
                                 <button
                                     key={f}
-                                    onClick={() => setFilter(f === 'ALL_SYS' ? 'ALL_SYS' : f)} // Just mocking interaction
-                                    className={`px-4 py-1.5 text-xs font-mono font-bold uppercase border transition-all
+                                    onClick={() => setFilter(f === 'ALL_SYS' ? 'ALL_SYS' : f)}
+                                    className={`px-2 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-mono font-bold uppercase border transition-all whitespace-nowrap
                                         ${filter === f || (f === 'ALL_SYS' && filter === 'ALL_SYS')
                                             ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
                                             : 'border-white/20 text-gray-500 hover:border-white/50 hover:text-white'
@@ -213,6 +184,12 @@ export default function ProductsPage() {
                                             <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${style.sub}`}>
                                                 BEBOP-0{i + 1}
                                             </span>
+                                            {/* Price Tag Mockup */}
+                                            {product.priceLabel && (
+                                                <div className={`px-2 py-0.5 rounded-sm bg-black/10 backdrop-blur-md ${style.sub} text-xs font-bold`}>
+                                                    {product.priceLabel}
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Title Block */}
@@ -222,7 +199,8 @@ export default function ProductsPage() {
                                             ))}
                                         </h3>
                                         <div className={`font-japanese text-xl opacity-60 font-bold ${style.text}`}>
-                                            {style.japanese}
+                                            {/* Using complexity as a sub-label if available */}
+                                            {product.complexity ? `${product.complexity} LVL` : style.japanese}
                                         </div>
 
                                         {/* Center Icon (The "Diamond" or "Square") */}

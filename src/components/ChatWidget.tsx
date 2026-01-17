@@ -3,18 +3,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    MessageCircle,
+    Terminal,
     X,
     Send,
-    Bot,
-    User,
-    Sparkles
+    Cpu,
+    Loader2,
+    Zap
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 interface Message {
-    role: 'user' | 'bot';
+    role: 'user' | 'bot' | 'system';
     text: string;
     options?: string[];
 }
@@ -22,189 +20,184 @@ interface Message {
 const initialMessages: Message[] = [
     {
         role: 'bot',
-        text: '👋 Oi! Sou o assistente do Automatize. Como posso ajudar você hoje?',
+        text: 'ROOT ACCESS GRANTED.\nI am the DOE Agent Interface. Select a query protocol:',
         options: [
-            'Tenho dúvida sobre um protocolo DOE',
-            'Como funciona a entrega?',
-            'Preciso de suporte técnico',
-            'Quero falar com humano'
+            'What is DOE?',
+            'List Active Modules',
+            'Execution Pricing',
+            'Deployment Guide'
         ]
     }
 ];
 
-// Respostas automáticas baseadas em palavras-chave
-const responses: { [key: string]: Message } = {
-    'dúvida sobre um protocolo doe': {
+// Base responses
+const baseResponses: { [key: string]: Message } = {
+    'what is doe': {
         role: 'bot',
-        text: 'Qual protocolo DOE te interessa? Posso te dar detalhes sobre qualquer um deles! 🚀',
-        options: ['Point Control (RH)', 'LinkedIn Pro (Vendas)', 'Auto Post Social (Marketing)', 'Ver todos protocolos DOE']
+        text: `DOE STRUCTURE ANALYSIS:
+        
+> DIRECTIVE: Define goals, guardrails, and success metrics.
+> ORCHESTRATION: Manage state, routing, and decision trees.
+> EXECUTION: Deterministic Python scripts interacting with APIs.
+
+It is the standard for building reliable, self-healing AI agents.`,
+        options: ['Why Python?', 'Self-Annealing?', 'List Active Modules']
     },
-    'como funciona a entrega': {
+    'active modules': {
         role: 'bot',
-        text: `A entrega é 100% automática! ⚡
+        text: `AVAILABLE FRAMEWORK MODULES:
 
-1️⃣ Compra aprovada (PIX em segundos, cartão na hora)
-2️⃣ Email com acesso em até 2 minutos
-3️⃣ Área de membros com todos os arquivos
+1. [NEURAL] SEO Calculator
+   > Vibe Coding / ROI Analysis
+2. [SYNC] Lead Scraper
+   > Self-Annealing / Data Extraction
+3. [KINETIC] Proposal Engine
+   > MCP / Transcripts to Docs
+4. [VOID] Research Dossier
+   > Parallel Sub-agents / Deep Dive
 
-📦 Você recebe:
-• Diretiva (SOPs + guardrails)
-• Orquestração (mapas, roteiros e fluxos)
-• Execução (scripts determinísticos)
-• Guias e vídeos de implementação
-
-Tem garantia de 7 dias! Alguma outra dúvida?`,
-        options: ['Como colocar no ar?', 'Preciso saber programar?', 'Ver protocolos DOE']
+Select a module for detailed specs.`,
+        options: ['SEO Calculator', 'Lead Scraper', 'Proposal Engine', 'Research Dossier']
     },
-    'suporte técnico': {
+    'execution pricing': {
         role: 'bot',
-        text: `Para suporte técnico, você tem várias opções:
+        text: `LICENSE COST: ZERO.
+        
+The DOE Framework is open-architecture. You pay only for:
+1. Intelligence (LLM API tokens)
+2. Compute (VPS/Local Machine)
 
-📚 Base de conhecimento: Acesse nossos guias
-💬 Grupo Telegram: Comunidade ativa (link no email de compra)
-📧 Email: suporte@automatize.com.br
-
-🕐 Tempo de resposta: até 24h
-
-Primeira compra? Recomendo ver o FAQ primeiro! Posso ajudar em mais algo?`,
-        options: ['Ver FAQ', 'Voltar ao início']
+We sell the Blueprints (Code + Docs). You own the runtime.`,
+        options: ['List Active Modules', 'Deployment Guide']
     },
-    'falar com humano': {
+    'deployment': {
         role: 'bot',
-        text: `Claro! 🙋‍♂️ 
+        text: `DEPLOYMENT VECTOR:
+        
+1. Git Clone Repository
+2. Configure .env (API Keys)
+3. Docker Compose Up
+4. Execute Entrypoint
 
-Para falar com nossa equipe:
-📧 Email: contato@automatize.com.br
-💬 Telegram: @automatize
-
-Respondemos em até 24h (normalmente muito antes!).
-
-Enquanto isso, posso te ajudar com alguma informação?`,
-        options: ['Ver protocolos DOE', 'Ver FAQ', 'Voltar ao início']
+Can run locally, on Vercel (for UI), or any Linux VPS.`,
+        options: ['What about n8n?', 'Self-Annealing?']
     },
-    'point control': {
+    'seo calculator': {
         role: 'bot',
-        text: `**Point Control** - Controle de Ponto Automatizado 🕐
+        text: `MODULE: SEO CALCULATOR
+complexity: LOW
+framework: Vibe Coding
 
-📦 O que você recebe:
-• Blueprint DOE completo (Directive + Orchestration + Execution)
-• Guia PDF 30 páginas
-• 5 vídeos tutoriais
-• Dashboard pronto
-
-💰 Investimento: R$ 147 (pagamento único)
-🏆 Ideal para: Empresas com 5-50 funcionários
-
-É nosso produto mais vendido! Quer saber mais?`,
-        options: ['Quero comprar', 'Como colocar no ar?', 'Ver outros produtos']
+Generates ROI projections and keyword gap analysis instantly. Good entry point for understanding agent logic.`,
+        options: ['Back to Modules', 'Get Access']
     },
-    'linkedin pro': {
+    'lead scraper': {
         role: 'bot',
-        text: `**LinkedIn Pro** - Prospecção Automatizada 🔗
+        text: `MODULE: LEAD SCRAPER
+complexity: MEDIUM
+framework: DOE / Self-Annealing
 
-📦 O que você recebe:
-• Blueprint DOE completo (Directive + Orchestration + Execution)  
-• 8 templates de mensagens
-• 50 ganchos de abertura testados
-• Planilha de tracking
-
-💰 Investimento: R$ 197 (pagamento único)
-📈 Resultado: Média de 50 leads/semana
-
-Perfeito para vendedores B2B! Alguma dúvida?`,
-        options: ['Quero comprar', 'É seguro usar?', 'Ver outros produtos']
+Autonomous browser agent. Detects layout changes and fixes its own selectors (Self-Annealing). Zero manual maintenance.`,
+        options: ['Back to Modules', 'Get Access']
     },
-    'auto post': {
+    'proposal engine': {
         role: 'bot',
-        text: `**Auto Post Social** - Gestão de Redes Sociais 📱
+        text: `MODULE: PROPOSAL ENGINE
+complexity: MEDIUM
+framework: MCP (Model Context Protocol)
 
-📦 O que você recebe:
-• Blueprint DOE completo (Directive + Orchestration + Execution)
-• 100 templates de posts
-• Calendário de conteúdo
-• Guia de estratégia
-
-💰 Investimento: R$ 127 (pagamento único)
-🎯 Publica em: Instagram, Facebook, Twitter, LinkedIn, TikTok
-
-Economia de 10h+ por semana! Interesse?`,
-        options: ['Quero comprar', 'Funciona com todas as redes?', 'Ver outros produtos']
+Ingests meeting audio, extracts intent, and drafts comprehensive commercial proposals using your templates.`,
+        options: ['Back to Modules', 'Get Access']
     },
-    'colocar no ar': {
+    'research dossier': {
         role: 'bot',
-        text: `Colocar no ar é super simples! 5 passos:
+        text: `MODULE: RESEARCH DOSSIER
+complexity: HIGH
+framework: Parallel Sub-agents
 
-1️⃣ Alinhe a diretiva (objetivos + dados)
-2️⃣ Conecte credenciais das ferramentas
-3️⃣ Rode os scripts de execução
-4️⃣ Ative monitoramento e métricas
-5️⃣ Ajuste fino com o playbook 🎉
-
-Tempo médio: 15-30 minutos
-Não precisa saber programar!
-
-Os vídeos mostram cada etapa. Mais alguma dúvida?`,
-        options: ['O que é DOE?', 'Ver protocolos DOE', 'Voltar ao início']
+Spawns 5-10 sub-agents to scour the web, read pages, and verify facts. Aggregates findings into a single authority report.`,
+        options: ['Back to Modules', 'Get Access']
     },
-    'instalar': {
+    'n8n': {
         role: 'bot',
-        text: `Colocar no ar é super simples! 5 passos:
-
-1️⃣ Alinhe a diretiva (objetivos + dados)
-2️⃣ Conecte credenciais das ferramentas
-3️⃣ Rode os scripts de execução
-4️⃣ Ative monitoramento e métricas
-5️⃣ Ajuste fino com o playbook 🎉
-
-Tempo médio: 15-30 minutos
-Não precisa saber programar!
-
-Os vídeos mostram cada etapa. Mais alguma dúvida?`,
-        options: ['O que é DOE?', 'Ver protocolos DOE', 'Voltar ao início']
+        text: `N8N LIMITATION ANALYSIS:
+        
+Visual nodes fail at managing complex state loops. debugging is slow. Version control is binary.
+DOE (Python) offers: unit testing, git flow, type safety, and raw performance.`,
+        options: ['What is DOE?', 'List Active Modules']
     },
-    'programar': {
+    'self-annealing': {
         role: 'bot',
-        text: `**Não precisa saber programar!** 🙌
+        text: `SELF-ANNEALING MECHANISM:
+        
+If an agent step fails (e.g., selector not found), it catches the exception, analyzes the DOM/Error with an LLM, updates its own logic file, and retries.
+The system hardens over time.
 
-Nossos protocolos DOE já vêm prontos — você só:
-✅ Define objetivos e dados
-✅ Conecta credenciais (APIs, etc)
-✅ Executa e monitora
-
-Os vídeos mostram cada passo. Se travar, o suporte ajuda!`,
-        options: ['O que é DOE?', 'Como funciona a entrega?', 'Ver protocolos DOE']
+TRY IT: Type something I don't understand, and watch me learn.`,
+        options: ['List Active Modules', 'Deployment Guide']
     },
-    'doe': {
+    'python': {
         role: 'bot',
-        text: `**DOE Framework** (Directive, Orchestration, Execution) é uma arquitetura para transformar IA em automações confiáveis:
+        text: `WHY PYTHON?
 
-🧠 Directive: objetivos, SOPs e guardrails
-🧭 Orchestration: roteamento, estado e decisões
-⚙️ Execution: scripts determinísticos para APIs e dados
-
-É o jeito mais seguro de levar agentes para produção.`,
-        options: ['Ver protocolos DOE', 'Como colocar no ar?', 'Voltar ao início']
+- Full control over execution flow
+- Native exception handling for Self-Annealing
+- Type hints + Pydantic for data validation
+- Vast ecosystem (requests, playwright, pandas)
+- Easy to unit test and version control`,
+        options: ['What is DOE?', 'List Active Modules']
     },
-    'default': {
+    'back to modules': {
         role: 'bot',
-        text: `Hmm, não tenho certeza se entendi. 🤔
+        text: `AVAILABLE FRAMEWORK MODULES:
 
-Posso te ajudar com:
-• Informações sobre protocolos DOE
-• Como funciona a entrega
-• Suporte técnico
-• Falar com nossa equipe
+1. [NEURAL] SEO Calculator
+2. [SYNC] Lead Scraper
+3. [KINETIC] Proposal Engine
+4. [VOID] Research Dossier`,
+        options: ['SEO Calculator', 'Lead Scraper', 'Proposal Engine', 'Research Dossier']
+    },
+    'get access': {
+        role: 'bot',
+        text: `ACCESS PROTOCOL:
 
-O que prefere?`,
-        options: ['Ver protocolos DOE', 'Como funciona?', 'Suporte', 'Falar com humano']
+Navigate to the PRODUCTS section to view blueprints.
+Each module includes:
+- Source Code (Python)
+- Documentation
+- Deployment Guide`,
+        options: ['List Active Modules', 'What is DOE?']
     }
 };
+
+// Simple Levenshtein distance for fuzzy matching
+function levenshtein(a: string, b: string): number {
+    const matrix: number[][] = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
 
 export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [learnedKeywords, setLearnedKeywords] = useState<Record<string, string>>({});
+    const [annealingCount, setAnnealingCount] = useState(0);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -215,61 +208,123 @@ export default function ChatWidget() {
         scrollToBottom();
     }, [messages]);
 
-    const findResponse = (text: string): Message => {
-        const lowerText = text.toLowerCase();
+    const findClosestKey = (text: string): string | null => {
+        const keys = Object.keys(baseResponses).filter(k => k !== 'default');
+        let bestMatch: string | null = null;
+        let bestScore = Infinity;
 
-        for (const [key, response] of Object.entries(responses)) {
-            if (lowerText.includes(key)) {
-                return response;
+        for (const key of keys) {
+            const distance = levenshtein(text.toLowerCase(), key);
+            // Also check if any word in the input is close to a key word
+            const words = text.toLowerCase().split(/\s+/);
+            for (const word of words) {
+                const wordDistance = levenshtein(word, key.split(' ')[0]);
+                if (wordDistance < bestScore && wordDistance <= 3) {
+                    bestScore = wordDistance;
+                    bestMatch = key;
+                }
+            }
+            if (distance < bestScore && distance <= 4) {
+                bestScore = distance;
+                bestMatch = key;
+            }
+        }
+        return bestMatch;
+    };
+
+    const findResponse = (text: string): { response: Message; wasLearned: boolean; learnedFrom?: string } => {
+        const lowerText = text.toLowerCase().trim();
+
+        // First check learned keywords
+        if (learnedKeywords[lowerText]) {
+            return { response: baseResponses[learnedKeywords[lowerText]], wasLearned: true, learnedFrom: learnedKeywords[lowerText] };
+        }
+
+        // Then check base responses
+        for (const [key, response] of Object.entries(baseResponses)) {
+            if (lowerText.includes(key) || lowerText.includes(key.split(' ')[0])) {
+                return { response, wasLearned: false };
             }
         }
 
-        // Palavras-chave específicas
-        if (lowerText.includes('comprar') || lowerText.includes('preço') || lowerText.includes('valor')) {
-            return {
+        // Not found - return null to trigger self-annealing
+        return {
+            response: {
                 role: 'bot',
-                text: 'Para comprar, é só acessar a página do produto e clicar em "Comprar Agora". O pagamento é processado pela Kiwify (PIX, cartão ou boleto) e a entrega é imediata! 🛒',
-                options: ['Ver protocolos DOE', 'Como funciona a entrega?']
-            };
-        }
-
-        if (lowerText.includes('garantia')) {
-            return {
-                role: 'bot',
-                text: '🛡️ Oferecemos **7 dias de garantia incondicional**!\n\nSe por qualquer motivo você não ficar satisfeito, basta enviar um email e devolvemos 100% do valor. Sem perguntas, sem burocracia.',
-                options: ['Ver protocolos DOE', 'Voltar ao início']
-            };
-        }
-
-        return responses['default'];
+                text: 'COMMAND NOT RECOGNIZED.\nPlease select a valid protocol or rephrase query.',
+                options: ['List Active Modules', 'What is DOE?']
+            },
+            wasLearned: false
+        };
     };
 
     const handleSend = async (text?: string) => {
         const messageText = text || input;
         if (!messageText.trim()) return;
 
-        // Add user message
         const userMessage: Message = { role: 'user', text: messageText };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
         setIsTyping(true);
 
-        // Simulate typing delay
-        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 700));
+        await new Promise(resolve => setTimeout(resolve, 400));
 
-        // Find and add bot response
-        const botResponse = findResponse(messageText);
-        setMessages(prev => [...prev, botResponse]);
+        const { response, wasLearned, learnedFrom } = findResponse(messageText);
+
+        // Check if we need to trigger self-annealing
+        const lowerText = messageText.toLowerCase().trim();
+        const isUnknown = response.text.includes('COMMAND NOT RECOGNIZED');
+
+        if (isUnknown) {
+            // SELF-ANNEALING TRIGGERED
+            const closestKey = findClosestKey(messageText);
+
+            if (closestKey) {
+                // Show annealing process
+                const annealingMsg: Message = {
+                    role: 'system',
+                    text: `⚡ SELF-ANNEALING TRIGGERED
+━━━━━━━━━━━━━━━━━━━━━━━━
+> Analyzing input pattern...
+> Closest match found: "${closestKey}"
+> Learning association: "${lowerText}" → "${closestKey}"
+> Updating knowledge base...
+━━━━━━━━━━━━━━━━━━━━━━━━
+✓ ANNEALING COMPLETE`
+                };
+                setMessages(prev => [...prev, annealingMsg]);
+
+                // Learn the new keyword
+                setLearnedKeywords(prev => ({ ...prev, [lowerText]: closestKey }));
+                setAnnealingCount(prev => prev + 1);
+
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // Now provide the correct response
+                const learnedResponse = baseResponses[closestKey];
+                setMessages(prev => [...prev, learnedResponse]);
+                setIsTyping(false);
+                return;
+            }
+        }
+
+        // If it was a previously learned keyword, show a note
+        if (wasLearned && learnedFrom) {
+            const recallMsg: Message = {
+                role: 'system',
+                text: `🧠 RECALL: Using learned association → "${learnedFrom}"`
+            };
+            setMessages(prev => [...prev, recallMsg]);
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+
+        setMessages(prev => [...prev, response]);
         setIsTyping(false);
-    };
-
-    const handleOptionClick = (option: string) => {
-        handleSend(option);
     };
 
     return (
         <>
-            {/* Chat Bubble */}
+            {/* Chat Bubble Trigger */}
             <AnimatePresence>
                 {!isOpen && (
                     <motion.button
@@ -277,145 +332,102 @@ export default function ChatWidget() {
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-cta rounded-full shadow-lg hover:shadow-glow flex items-center justify-center group"
+                        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-black border border-white/20 hover:border-[#E9C46A] shadow-lg flex items-center justify-center group transition-colors"
                     >
-                        <MessageCircle className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
-                        {/* Pulse animation */}
-                        <span className="absolute inset-0 rounded-full bg-[#f97316] animate-ping opacity-25" />
+                        <Terminal className="w-5 h-5 text-gray-400 group-hover:text-[#E9C46A] transition-colors" />
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#E9C46A] rounded-full animate-pulse" />
                     </motion.button>
                 )}
             </AnimatePresence>
 
-            {/* Chat Window */}
+            {/* Terminal Window */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[600px] max-h-[calc(100vh-100px)] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+                        className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[350px] md:w-[400px] h-[70vh] sm:h-[500px] bg-[#050505] border-t sm:border border-white/20 shadow-2xl flex flex-col overflow-hidden font-mono text-xs"
                     >
                         {/* Header */}
-                        <div className="bg-gradient-brand p-4 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                    <Bot className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-white">Assistente</h3>
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-2 h-2 bg-green-400 rounded-full" />
-                                        <span className="text-xs text-white/80">Online agora</span>
-                                    </div>
-                                </div>
+                        <div className="bg-[#0A0A0A] border-b border-white/10 p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Cpu className="w-4 h-4 text-[#E9C46A]" />
+                                <span className="text-gray-400 font-bold tracking-widest uppercase text-[10px] sm:text-xs">DOE_AGENT</span>
+                                {annealingCount > 0 && (
+                                    <span className="text-[10px] text-green-500 flex items-center gap-1">
+                                        <Zap className="w-3 h-3" /> {annealingCount} learned
+                                    </span>
+                                )}
                             </div>
-                            <button
-                                onClick={() => setIsOpen(false)}
-                                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
-                            >
-                                <X className="w-5 h-5 text-white" />
+                            <button onClick={() => setIsOpen(false)} className="hover:text-white text-gray-500">
+                                <X className="w-4 h-4" />
                             </button>
                         </div>
 
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {/* Terminal Body */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                             {messages.map((msg, i) => (
                                 <motion.div
                                     key={i}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
                                 >
-                                    <div className={`flex items-start gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                                        {/* Avatar */}
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user'
-                                                ? 'bg-[#f97316]'
-                                                : 'bg-gradient-brand'
-                                            }`}>
-                                            {msg.role === 'user'
-                                                ? <User className="w-4 h-4 text-white" />
-                                                : <Sparkles className="w-4 h-4 text-white" />
-                                            }
+                                    <div className={`max-w-[90%] p-3 border ${msg.role === 'user'
+                                        ? 'bg-white/5 border-white/20 text-gray-300'
+                                        : msg.role === 'system'
+                                            ? 'bg-green-900/20 border-green-500/30 text-green-400'
+                                            : 'bg-black border-[#E9C46A]/30 text-[#E9C46A]'
+                                        }`}>
+                                        <div className="mb-1 opacity-50 text-[10px] uppercase">
+                                            {msg.role === 'user' ? '> USER_INPUT' : msg.role === 'system' ? '> SELF_ANNEALING' : '> SYSTEM_RESPONSE'}
                                         </div>
-
-                                        {/* Message Bubble */}
-                                        <div className="space-y-2">
-                                            <div className={`rounded-2xl px-4 py-3 ${msg.role === 'user'
-                                                    ? 'bg-[#f97316] text-white rounded-br-md'
-                                                    : 'bg-muted text-foreground rounded-bl-md'
-                                                }`}>
-                                                <div className="text-sm whitespace-pre-line">{msg.text}</div>
-                                            </div>
-
-                                            {/* Options */}
-                                            {msg.role === 'bot' && msg.options && (
-                                                <div className="flex flex-wrap gap-2">
-                                                    {msg.options.map((option, j) => (
-                                                        <button
-                                                            key={j}
-                                                            onClick={() => handleOptionClick(option)}
-                                                            className="text-xs bg-background border border-border hover:border-[#f97316] hover:text-[#f97316] rounded-full px-3 py-1.5 transition-colors"
-                                                        >
-                                                            {option}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
+                                        <div className="whitespace-pre-wrap leading-relaxed">
+                                            {msg.text}
                                         </div>
                                     </div>
+
+                                    {/* Quick Actions (only for latest bot message) */}
+                                    {msg.role === 'bot' && msg.options && i === messages.length - 1 && (
+                                        <div className="mt-2 flex flex-wrap gap-2">
+                                            {msg.options.map((opt, k) => (
+                                                <button
+                                                    key={k}
+                                                    onClick={() => handleSend(opt)}
+                                                    className="px-2 py-1 border border-white/10 text-[10px] text-gray-500 hover:border-[#E9C46A] hover:text-[#E9C46A] hover:bg-[#E9C46A]/10 transition-all uppercase"
+                                                >
+                                                    [{opt}]
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </motion.div>
                             ))}
 
-                            {/* Typing Indicator */}
                             {isTyping && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="flex items-center gap-2"
-                                >
-                                    <div className="w-8 h-8 rounded-full bg-gradient-brand flex items-center justify-center">
-                                        <Sparkles className="w-4 h-4 text-white" />
-                                    </div>
-                                    <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
-                                        <div className="flex gap-1">
-                                            <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                            <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                            <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                                        </div>
-                                    </div>
-                                </motion.div>
+                                <div className="flex items-center gap-2 text-gray-500">
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    <span>PROCESSING...</span>
+                                </div>
                             )}
-
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {/* Input */}
-                        <div className="p-4 border-t border-border">
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    handleSend();
-                                }}
-                                className="flex gap-2"
-                            >
-                                <Input
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    placeholder="Digite sua mensagem..."
-                                    className="flex-1 bg-muted border-border focus:border-[#f97316]"
-                                    disabled={isTyping}
-                                />
-                                <Button
-                                    type="submit"
-                                    size="icon"
-                                    className="bg-gradient-cta hover:opacity-90 text-white"
-                                    disabled={isTyping || !input.trim()}
-                                >
-                                    <Send className="w-4 h-4" />
-                                </Button>
-                            </form>
+                        {/* Input Area */}
+                        <div className="p-3 bg-[#0A0A0A] border-t border-white/10 flex gap-2">
+                            <span className="text-[#E9C46A] py-2">{'>'}</span>
+                            <input
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                placeholder="EXECUTE_COMMAND..."
+                                className="flex-1 bg-transparent border-none focus:ring-0 text-[#E9C46A] placeholder-gray-700 outline-none font-mono"
+                                autoFocus
+                            />
+                            <button onClick={() => handleSend()} disabled={!input} className="text-gray-500 hover:text-white disabled:opacity-30">
+                                <Send className="w-4 h-4" />
+                            </button>
                         </div>
                     </motion.div>
                 )}

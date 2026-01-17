@@ -1,5 +1,7 @@
 import { Bebas_Neue, Space_Grotesk, Noto_Sans_JP } from 'next/font/google';
 import './globals.css';
+import ChatWidget from '@/components/ChatWidget';
+import Providers from '@/components/Providers';
 
 const bebas = Bebas_Neue({
   weight: '400',
@@ -22,8 +24,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata = {
-  title: 'BEBOP AUTOMATIONS | Retro-Futuristic Solutions',
-  description: 'DOE Framework automations for reliable, production-ready agentic systems.',
+  title: 'DOE Framework | Build Reliable AI Agents',
+  description: 'DOE Framework automations for reliable, production-ready agentic systems. Self-Annealing. Python. No n8n.',
 };
 
 export default function RootLayout({
@@ -37,7 +39,10 @@ export default function RootLayout({
         {/* Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-50 bg-[url('https://lh3.googleusercontent.com/aida-public/AB6AXuAY4DLNSuQR7SxoKtxxvLAsgeb8Bn_C0hd9yo6t8GfDblRwa50EECW-iRt5dg2If3XV5UkB7yUIDNTGMe7lys3LI66W8UCzrMI8GSxCWHUlkfb_ju6rb6JfsX3m1t20cZr8TfKylyCid1T4-4iE1rgpW9T-z0T5ZTliQJhyfdEZ737UkDsTSPYK3Gigpmwe2L7gIVVw_NCV3Tgk-d9WzgjsuKKFucTlJ4G1A-RFtlmSmbdxfyOljRz_eLB98vIGbSuuarM7l2SF9wf-')] mix-blend-overlay" />
 
-        {children}
+        <Providers>
+          {children}
+        </Providers>
+        <ChatWidget />
       </body>
     </html>
   );

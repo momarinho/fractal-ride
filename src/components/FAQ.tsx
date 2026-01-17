@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { HelpCircle, MessageCircle, Terminal } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import {
     Accordion,
     AccordionContent,
@@ -9,9 +9,17 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { faqs } from '@/lib/products';
 
-export default function FAQ() {
+interface FAQItem {
+    question: string;
+    answer: string;
+}
+
+interface FAQProps {
+    faqs: FAQItem[];
+}
+
+export default function FAQ({ faqs }: FAQProps) {
     return (
         <section id="faq" className="py-20 lg:py-32 relative overflow-hidden bg-[#050505]">
             <div className="container mx-auto px-6 relative z-10">

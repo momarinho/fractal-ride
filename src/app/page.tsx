@@ -2,170 +2,114 @@
 
 import Hero from '@/components/Hero';
 import FeaturedProducts from '@/components/FeaturedProducts';
-import Testimonials from '@/components/Testimonials';
 import FAQ from '@/components/FAQ';
+import SelfAnnealingDemo from '@/components/SelfAnnealingDemo';
+import { Calculator, Database, FileText, BookOpen } from 'lucide-react';
+import { faqs } from '@/lib/products';
 
 export default function Home() {
-  const products = [
+  const featuredProducts = [
     {
-      id: 'starter',
-      name: 'Starter Pack',
-      price: 'R$ 497',
-      description: 'Codigo-fonte completo + Docker + Documentation',
-      features: [
-        '✅ Codigo-fonte 100% seu',
-        '✅ Docker Compose pronto',
-        '✅ README detalhado',
-        '✅ Sample transcript incluido',
-        '⚠️ Setup manual em 30min',
-      ],
-      cta: 'Comprar Agora',
-      ctaLink: 'https://gumroad.com/momarinho',
-      highlight: false,
+      id: '01',
+      title: 'SEO CALCULATOR',
+      jpTitle: 'SEO計算機',
+      desc: 'Calculate SEO potential with Vibe Coding. Low complexity, high impact.',
+      complexity: 'Low',
+      framework: 'Vibe Coding',
+      fee: '$39 - $99',
+      icon: Calculator,
+      bg: 'bg-[#E63946]',
+      link: '/produtos/seo-calculator'
     },
     {
-      id: 'pro',
-      name: 'Pro Pack',
-      price: 'R$ 1.497',
-      description: '+ Playbooks DevOps + Setup guiado + 2h suporte',
-      features: [
-        '✅ Tudo do Starter +',
-        '✅ Playbooks de deployment',
-        '✅ Templates customizaveis',
-        '✅ PLAYBOOK.md com 3 opcoes deploy',
-        '✅ Email suporte por 30 dias',
-      ],
-      cta: 'Comprar Agora',
-      ctaLink: 'https://gumroad.com/momarinho',
-      highlight: true,
+      id: '02',
+      title: 'LEAD SCRAPER',
+      jpTitle: 'リードスクレーパー',
+      desc: 'Autonomous lead generation using DOE & Self-Annealing agents.',
+      complexity: 'Medium',
+      framework: 'DOE / Self-Annealing',
+      fee: '$300 - $800',
+      icon: Database,
+      bg: 'bg-[#2A9D8F]',
+      link: '/produtos/lead-scraper'
     },
     {
-      id: 'enterprise',
-      name: 'Enterprise',
-      price: 'R$ 2.997+',
-      description: '+ White-label + Customizacoes leves + Suporte prioritario',
-      features: [
-        '✅ Tudo do Pro +',
-        '✅ Customizacao de branding',
-        '✅ Integracao com seu sistema',
-        '✅ Suporte email prioritario',
-        '✅ Atualizacoes automaticas',
-      ],
-      cta: 'Contactar',
-      ctaLink: 'mailto:momarinho@email.com',
-      highlight: false,
-    },
-  ];
-
-  const faqs = [
-    {
-      question: 'O que e Vector Spirit?',
-      answer: 'Vector Spirit e um agente DOE que transforma transcricoes de reunioes de vendas em propostas value-based em menos de 15 minutos. Combina IA com automacao deterministica para evitar falhas.',
+      id: '03',
+      title: 'PROPOSAL ENGINE',
+      jpTitle: '提案エンジン',
+      desc: 'Transform meetings into winning proposals with MCP agents.',
+      complexity: 'Medium',
+      framework: 'MCP',
+      fee: '$500 - $1,500',
+      icon: FileText,
+      bg: 'bg-[#E9C46A]',
+      link: '/produtos/proposal-engine'
     },
     {
-      question: 'Preciso de conhecimento tecnico?',
-      answer: 'Nao! Com Docker, voce faz deploy em 15 minutos. docker-compose up -d. Se nao quiser Docker, so Python venv. PLAYBOOK.md guia cada passo.',
-    },
-    {
-      question: 'E LGPD e GDPR compliant?',
-      answer: 'Sim! Ver SECURITY.md. Nao armazenamos transcripts. Processamento em memoria, depois descartados. Voce tem controle total da infra.',
-    },
-    {
-      question: 'Posso usar como SaaS publico?',
-      answer: 'Nao sem licenca comercial. Use internamente ou em servico maior. SaaS publico: momarinho@email.com',
-    },
-    {
-      question: 'Qual e o tempo de setup?',
-      answer: 'Docker: 15 min. Python: 30 min. Cloud (Railway): 5 min. Tudo no PLAYBOOK.md',
-    },
-    {
-      question: 'Funciona com qual LLM?',
-      answer: 'OpenAI (GPT-4o-mini), Claude, ou DeepSeek. Voce configura sua chave. Nenhuma chave fica conosco.',
-    },
-    {
-      question: 'E se quiser customizar?',
-      answer: 'Claro! Codigo e seu. Edit agents.md, customize prompts, adicione ferramentas. Enterprise: customizacoes profissionais.',
-    },
-    {
-      question: 'Tem suporte?',
-      answer: 'Starter: comunidade. Pro: email 30 dias. Enterprise: prioritario. Docs resolvem 90% das duvidas.',
+      id: '04',
+      title: 'RESEARCH DOSSIER',
+      jpTitle: '調査報告書',
+      desc: 'Deep authority reports using parallel sub-agents for due diligence.',
+      complexity: 'High',
+      framework: 'Parallel Sub-agents',
+      fee: '$2,000 - $5,000',
+      icon: BookOpen,
+      bg: 'bg-[#2E5BFF]',
+      link: '/produtos/research-dossier'
     },
   ];
 
   return (
-    <main className="bg-[#050505] min-h-screen">
+    <main className="min-h-screen bg-[#050505] text-white">
       <Hero
-        title="DOE Agents: Automatize Propostas em Segundos"
-        subtitle="Transforme transcricoes em propostas value-based com IA. Self-hosted, sem lock-in."
-        ctaText="Ver Demo"
-        ctaLink="https://github.com/momarinho/vector-spirit"
+        title="DOE Framework"
+        subtitle="Build reliable AI agents with Python & Zed. From $50 tools to $5000 enterprise solutions."
+        ctaText="Explore Modules"
+        ctaLink="#products"
       />
-      
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4 text-white">Arquitetura DOE</h2>
-          <p className="text-center text-gray-400 mb-12">
-            Directive → Orchestration → Execution
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-900 rounded-lg p-8">
-              <div className="text-3xl mb-4">📋</div>
-              <h3 className="text-xl font-bold text-white mb-3">Directive</h3>
-              <p className="text-gray-400">Instrucoes em Markdown com SOPs, guardrails, sucesso</p>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-8">
-              <div className="text-3xl mb-4">🔀</div>
-              <h3 className="text-xl font-bold text-white mb-3">Orchestration</h3>
-              <p className="text-gray-400">Agente que auto-corrige erros (self-annealing)</p>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-8">
-              <div className="text-3xl mb-4">⚙️</div>
-              <h3 className="text-xl font-bold text-white mb-3">Execution</h3>
-              <p className="text-gray-400">Scripts deterministicos em Python</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <FeaturedProducts products={products} />
+      <div id="products">
+        <FeaturedProducts products={featuredProducts} />
+      </div>
 
       <section className="py-20 px-4 bg-gray-950">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-white">Por que Vector Spirit</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="flex gap-4">
-              <div className="text-2xl">✨</div>
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">Why Abandon n8n?</h2>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="flex gap-6">
+              <div className="text-3xl text-pink-500">🧬</div>
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">Self-Annealing</h3>
-                <p className="text-gray-400">Erro 10% por step vira 0,1% no pipeline</p>
+                <h3 className="text-xl font-bold text-white mb-2">Complex State Management</h3>
+                <p className="text-gray-400 leading-relaxed">Visual nodes become spaghetti when handling complex, looping conversations or multi-step reasoning. Python handles state elegantly.</p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="text-2xl">🔒</div>
+            <div className="flex gap-6">
+              <div className="text-3xl text-blue-500">🛡️</div>
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">100% Self-Hosted</h3>
-                <p className="text-gray-400">Seu codigo, sua infra, seus dados. LGPD/GDPR</p>
+                <h3 className="text-xl font-bold text-white mb-2">Self-Annealing Reliability</h3>
+                <p className="text-gray-400 leading-relaxed">DOE agents fix themselves. If a step fails, they retry with new context or strategy, something hard to wire visually.</p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="text-2xl">📊</div>
+            <div className="flex gap-6">
+              <div className="text-3xl text-yellow-500">🚀</div>
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">Observavel</h3>
-                <p className="text-gray-400">Cada passo em state.json</p>
+                <h3 className="text-xl font-bold text-white mb-2">Performance & Control</h3>
+                <p className="text-gray-400 leading-relaxed">No overhead. Direct API calls, local file processing, and custom logic without the constraints of a no-code platform.</p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="text-2xl">⚡</div>
+            <div className="flex gap-6">
+              <div className="text-3xl text-green-500">💰</div>
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">Setup Rapido</h3>
-                <p className="text-gray-400">Docker 15min ou Python 30min</p>
+                <h3 className="text-xl font-bold text-white mb-2">High-Value Deliverables</h3>
+                <p className="text-gray-400 leading-relaxed">Sell outcomes, not workflows. From $50 tools to $5000 enterprise research dossiers, build assets that scale.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <Testimonials />
+      <SelfAnnealingDemo />
+
       <FAQ faqs={faqs} />
     </main>
   );

@@ -28,23 +28,22 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
-import ProductCard from '@/components/ProductCard';
 import { Product } from '@/lib/products';
 
 const categoryIcons: any = {
-    rh: Users,
-    vendas: TrendingUp,
-    marketing: Megaphone,
-    financeiro: Calculator,
+    neural: Users,
+    sync: TrendingUp,
+    kinetic: Calculator,
+    void: Megaphone,
     operacional: Settings,
 };
 
 // Bebop V3 Colors - Solid Backgrounds for the Left Panel
 const categoryColors: any = {
-    rh: 'bg-[#D00000]',      // Red
-    vendas: 'bg-[#0047AB]',  // Cobalt Blue
-    marketing: 'bg-[#1B4D3E]', // Deep Green
-    financeiro: 'bg-[#E9C46A]', // Yellow
+    neural: 'bg-[#D00000]',      // Red
+    sync: 'bg-[#1B4D3E]',  // Deep Green
+    kinetic: 'bg-[#E9C46A]', // Yellow
+    void: 'bg-[#0047AB]', // Cobalt Blue
     operacional: 'bg-[#333333]', // Dark Grey
 };
 

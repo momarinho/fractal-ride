@@ -1,349 +1,176 @@
-```markdown
-# 🎨 Fractal Ride - E-commerce Inteligente com Agentes DOE
+# Fractal Ride
 
-Plataforma de vendas online de próxima geração construída com **agentes autônomos** seguindo a **metodologia DOE (Directive/Orchestration/Execution)**. Combina Next.js 15, TypeScript e sistema de agentes com Self-Annealing para otimização contínua de conversões e experiência do usuário.
+E-commerce inteligente construído com **Next.js 15**, **TypeScript** e arquitetura de **agentes autônomos DOE** (Directive/Orchestration/Execution).
 
-> 🧬 **Diferencial**: Ao invés de automações estáticas (N8N), utiliza agentes inteligentes que seguem o framework **DOE** para executar tarefas complexas de forma estruturada e adaptativa.
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-90%25-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-Portfolio-green)](#licenca)
 
-## ⚠️ Avisos Importantes
+## Visao Geral
+
+Plataforma de vendas online que utiliza agentes inteligentes para otimizacao continua de conversoes. Ao inves de automacoes estaticas, o sistema emprega o **DOE Framework** - metodologia propria para construcao de agentes adaptativos com Self-Annealing.
 
 ### Status do Projeto
-Este é um projeto de **portfólio/demonstração** que apresenta a **arquitetura planejada** para o sistema completo. 
 
-**Implementação atual:**
-- ✅ Frontend Next.js 15 com TypeScript
-- ✅ Componentes UI (shadcn/ui)
-- ✅ Script Self-Annealing para build automation
-- ✅ Workflows N8N básicos (chatbot)
-- ✅ Internacionalização (i18n)
+| Componente | Status |
+|------------|--------|
+| Frontend Next.js 15 | Implementado |
+| UI Components (shadcn/ui) | Implementado |
+| Chatbot com LLM | Implementado |
+| Internacionalizacao (pt-BR/en-US) | Implementado |
+| Self-Annealing (build automation) | Implementado |
+| Agentes DOE completos | Planejado |
 
-**Arquitetura planejada** (será implementada na versão comercial):
-- 🔄 Sistema completo de agentes DOE
-- 🔄 Agentes de precificação dinâmica
-- 🔄 Agentes de recomendação inteligente
-- 🔄 Framework DOE completo (Directive/Orchestration/Execution)
+## Stack Tecnologica
 
-### Dados Fictícios
-Os dados de produtos, preços e informações de negócio nos workflows N8N são fictícios e servem apenas para ilustrar funcionalidades.
+**Frontend**
+- Next.js 15 (App Router)
+- React 19
+- TypeScript
+- TailwindCSS + shadcn/ui
+- Framer Motion
+- next-intl (i18n)
 
----
+**Backend & IA**
+- DeepSeek API (chatbot)
+- N8N (workflows)
+- Python (Self-Annealing script)
 
-## 🔧 Metodologia de Desenvolvimento
+## Arquitetura DOE
 
-Este projeto foi desenvolvido utilizando **AI-assisted coding** (vibe coding) com ferramentas como Cursor/Copilot. A arquitetura, decisões de design e lógica de negócio são autorais, enquanto a geração de código boilerplate e componentes UI foi acelerada por IA.
+O **DOE Framework** organiza agentes em tres camadas:
 
-### O que isso significa:
-- **Conceito e arquitetura**: 100% autoral
-- **Design do DOE Framework**: Metodologia própria
-- **Componentes UI**: Gerados com assistência de IA (shadcn/ui + prompts)
-- **Código boilerplate**: Acelerado por ferramentas de IA
+```
+Directive      ->  Define objetivos e restricoes
+Orchestration  ->  Planeja e coordena tarefas
+Execution      ->  Implementa acoes concretas
+```
 
-Esse approach é uma realidade moderna no desenvolvimento e demonstra habilidade em **prompt engineering** e **orquestração de ferramentas de IA** para produtividade.
-
----
-
-## 🤖 Arquitetura de Agentes DOE (Planejada)
-
-### O Framework DOE (Directive/Orchestration/Execution)
-
-O **DOE Framework** é uma metodologia própria para construção de agentes autônomos baseada em três camadas:
-
-1. **Directive (Diretiva)**: Define objetivos, contexto e restrições
-2. **Orchestration (Orquestração)**: Planeja e coordena tarefas entre múltiplos agentes
-3. **Execution (Execução)**: Implementa ações concretas e coleta resultados
-
-Com **Self-Annealing**, o sistema aprende e ajusta suas estratégias ao longo do tempo baseado em resultados.
+**Self-Annealing**: Inspirado no recozimento metalurgico, permite que agentes experimentem estrategias, avaliem resultados e refinem comportamentos gradualmente.
 
 ### Agentes Planejados
 
-**1. Agente de Conversação (Chatbot)**
-- **Directive**: Maximizar conversão através de interações naturais
-- **Orchestration**: Coordena LLM, base de conhecimento e analytics
-- **Execution**: Responde perguntas, sugere produtos, coleta feedback
-- **Self-Annealing**: Ajusta tom e estratégia baseado em taxas de conversão
+- **Conversacao**: Maximiza conversao via interacoes naturais
+- **Precificacao**: Otimiza receita em tempo real
+- **Recomendacao**: Aumenta ticket medio com cross-sell relevante
 
-**2. Agente de Precificação Dinâmica**
-- **Directive**: Otimizar receita mantendo competitividade
-- **Orchestration**: Analisa concorrência, demanda, perfil do usuário
-- **Execution**: Aplica ajustes de preço em tempo real
-- **Self-Annealing**: Converge para estratégias de precificação ótimas
+## Instalacao
 
-**3. Agente de Recomendação**
-- **Directive**: Aumentar ticket médio via cross-sell relevante
-- **Orchestration**: Combina histórico, similaridade de produtos, tendências
-- **Execution**: Sugere produtos complementares no momento certo
-- **Self-Annealing**: Aprende padrões de compra e refina recomendações
+### Pre-requisitos
+- Node.js 18+
+- npm ou pnpm
 
-### Self-Annealing: Otimização Contínua
+### Setup
 
-Inspirado no processo metalúrgico de recozimento, o **Self-Annealing** permite que agentes:
-- Experimentem diferentes estratégias (exploração)
-- Avaliem resultados de forma quantitativa
-- Refinam comportamentos gradualmente
-- Evitem mínimos locais (não ficam presos em soluções subótimas)
+```bash
+# Clone o repositorio
+git clone https://github.com/momarinho/fractal-ride.git
+cd fractal-ride
 
-**Status atual**: Implementado como script de build automation (`scripts/self_anneal.py`). A versão completa para agentes será implementada na versão comercial.
+# Instale dependencias
+npm install
 
----
+# Configure variaveis de ambiente
+cp .env.example .env.local
+```
 
-## 🧪 Por Que Agentes DOE ao Invés de Automações Tradicionais?
+Edite `.env.local`:
+```env
+DEEPSEEK_API_KEY=sua-chave-aqui
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-| Automações (N8N) | Agentes DOE |
-|------------------|-------------|
-| Fluxos fixos e previsíveis | Comportamento adaptativo |
-| Regras if/else manuais | Planejamento dinâmico (Orchestration) |
-| Manutenção constante | Auto-otimização (Self-Annealing) |
-| Mesma ação sempre | Execução baseada em contexto |
-| Escalabilidade limitada | Coordenação multi-agente |
+```bash
+# Execute em desenvolvimento
+npm run dev
+```
 
-**Exemplo conceitual**: Uma automação N8N envia o mesmo email promocional para todos. O agente DOE (planejado):
-- **Directive**: Maximizar taxa de abertura
-- **Orchestration**: Analisa histórico, hora ideal, dispositivo preferido
-- **Execution**: Envia email personalizado no momento ótimo
-- **Self-Annealing**: Testa variações de assunto/conteúdo e converge para os melhores
+Acesse [http://localhost:3000](http://localhost:3000)
 
----
-
-## 🚀 Tecnologias
-
-### Frontend
-- **Next.js 15** (App Router)
-- **TypeScript** (90.6% do código)
-- **React 19**
-- **TailwindCSS** + **shadcn/ui**
-- **Framer Motion** (animações)
-- **Lucide React** (ícones)
-
-### Backend & Inteligência (Planejado)
-- **DOE Framework** (Directive/Orchestration/Execution) com Self-Annealing
-- **Agentes Autônomos** (Python + TypeScript)
-- **LLM Integration** (DeepSeek/OpenAI para agentes conversacionais)
-
-### Automação Atual
-- **N8N** (workflows de chatbot)
-- **Self-Annealing** (build automation script)
-
-### Ferramentas de Desenvolvimento
-- **AI-Assisted Coding** (Cursor/GitHub Copilot)
-- **Prompt Engineering** para geração de componentes
-- **Git** + **GitHub** para versionamento
-
-### Internacionalização
-- **next-intl** (suporte pt-BR/en-US)
-
----
-
-## 📦 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 fractal-ride/
 ├── src/
-│   ├── app/              # App Router (Next.js 15)
-│   ├── components/       # Componentes React reutilizáveis
-│   ├── lib/              # Utilidades e configurações
-│   └── i18n/             # Traduções (pt-BR, en-US)
-├── scripts/              
-│   └── self_anneal.py    # Script de build automation com Self-Annealing
-├── n8n-workflows/        # Workflows de chatbot (N8N)
-│   ├── chatbot-automatize.json
-│   ├── chatbot-simple.json
-│   └── README.md
-└── public/               # Assets estáticos
+│   ├── app/           # App Router (paginas e API routes)
+│   ├── components/    # Componentes React
+│   ├── lib/           # Utilidades
+│   └── i18n/          # Traducoes (pt-BR, en-US)
+├── scripts/
+│   └── self_anneal.py # Build automation com Self-Annealing
+├── n8n-workflows/     # Workflows de chatbot
+└── public/            # Assets estaticos
 ```
 
-**Nota**: A estrutura completa do DOE Framework (com agentes de precificação, recomendação, orchestrator, etc.) será implementada na versão comercial privada.
+## Scripts
 
----
-
-## 🛠️ Instalação
-
-### Pré-requisitos
-- Node.js 18+ e npm/pnpm
-- N8N (opcional, para workflows de chatbot)
-
-### Passo a passo
-
-1. **Clone o repositório**
 ```bash
-git clone https://github.com/momarinho/fractal-ride.git
-cd fractal-ride
+npm run dev       # Desenvolvimento
+npm run build     # Build de producao
+npm run start     # Servidor de producao
+npm run lint      # Verificacao ESLint
+
+# Self-Annealing
+python scripts/self_anneal.py            # Build com otimizacao
+python scripts/self_anneal.py --dry-run  # Simular sem aplicar
 ```
 
-2. **Instale as dependências**
-```bash
-npm install
-# ou
-pnpm install
-```
-
-3. **Configure as variáveis de ambiente**
-```bash
-cp .env.example .env.local
-```
-
-Edite `.env.local` com suas credenciais:
-```env
-# Build Automation (Self-Annealing)
-DEEPSEEK_API_KEY=sua-chave-aqui
-OPENAI_API_KEY=sua-chave-fallback
-
-# N8N (opcional)
-NEXT_PUBLIC_N8N_WEBHOOK_URL=https://sua-instancia-n8n.com/webhook/chatbot
-
-# Configurações
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-4. **Execute o servidor de desenvolvimento**
-```bash
-npm run dev
-```
-
-Acesse [http://localhost:3000](http://localhost:3000) no navegador.
-
----
-
-## 📝 Nota sobre N8N Workflows
-
-A pasta `n8n-workflows/` contém workflows básicos de chatbot. Na versão de portfólio, demonstram integração com LLMs (DeepSeek). Na versão comercial, serão substituídos pelo sistema de agentes DOE.
-
-Instruções de configuração: [`n8n-workflows/README.md`](./n8n-workflows/README.md)
-
----
-
-## 🎨 Personalização
-
-### Tema e Cores
-Edite `src/app/globals.css` para alterar as variáveis CSS do tema:
-```css
-:root {
-  --background: 0 0% 100%;
-  --primary: 240 5.9% 10%;
-  /* ... */
-}
-```
-
-### Traduções
-Adicione/edite idiomas em `src/i18n/locales/`:
-- `pt-BR.json` (Português Brasil)
-- `en-US.json` (English)
-
----
-
-## 📸 Screenshots
-
-_(Adicione screenshots do seu projeto aqui)_
-
----
-
-## 🚢 Deploy
+## Deploy
 
 ### Vercel (Recomendado)
+
 ```bash
 npm run build
 vercel --prod
 ```
 
-Ou conecte o repositório diretamente na interface do Vercel.
+Ou conecte o repositorio diretamente no dashboard Vercel.
 
-### Outras Plataformas
-Compatível com Netlify, Railway, AWS Amplify e qualquer host que suporte Next.js.
+Compativel tambem com Netlify, Railway e AWS Amplify.
 
----
+## Metodologia de Desenvolvimento
 
-## 🧪 Scripts Disponíveis
+Projeto desenvolvido com **AI-assisted coding** (Cursor/Copilot):
 
-```bash
-# Frontend
-npm run dev          # Desenvolvimento (localhost:3000)
-npm run build        # Build de produção
-npm run start        # Servidor de produção
-npm run lint         # Verifica código com ESLint
+- **Arquitetura e conceitos**: 100% autoral
+- **DOE Framework**: Metodologia propria
+- **Componentes UI**: Gerados com assistencia de IA
+- **Codigo boilerplate**: Acelerado por ferramentas de IA
 
-# Build Automation
-python scripts/self_anneal.py              # Build com Self-Annealing
-python scripts/self_anneal.py --dry-run    # Simular correções sem aplicar
-```
+## Uso do Codigo
 
----
+**Permitido**
+- Estudar arquitetura e conceitos
+- Adaptar componentes para seus projetos
+- Usar como referencia Next.js
+- Fork para contribuicoes
 
-## 🎨 Sobre o Design e Uso do Código
+**Nao Permitido**
+- Revender como produto
+- Usar design completo comercialmente
+- Remover atribuicoes
+- Clonar DOE Framework sem credito
 
-### Design Visual e Assets
-- O design, layout e identidade visual são **proprietários** e servem para demonstração de habilidades
-- **Não utilize** o design completo ou assets visuais em projetos comerciais sem permissão
-- Capturas de tela e menções em portfólios são permitidas com crédito apropriado
-
-### Código e Implementação Técnica
-- O código-fonte (incluindo partes geradas por IA) está disponível para **estudo e referência**
-- A **arquitetura DOE e lógica de negócio** são proprietárias
-- Você pode usar trechos de código em seus projetos com atribuição
-- **Nota**: Parte do código foi gerada com assistência de IA, o que é comum em desenvolvimento moderno
-
-### Uso Permitido
-✅ Estudar a arquitetura e conceitos do DOE Framework  
-✅ Adaptar componentes específicos para seus projetos  
-✅ Usar como referência de arquitetura Next.js  
-✅ Fork para contribuições ao projeto original  
-
-### Uso NÃO Permitido
-❌ Revender o template/código como produto  
-❌ Usar o design completo em projetos comerciais  
-❌ Remover atribuições e reivindicar autoria  
-❌ Clonar o framework DOE conceitual sem crédito apropriado
-
-**Para uso comercial ou licenciamento**: Entre em contato via email ou LinkedIn.
-
----
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Siga estas etapas:
+## Contribuindo
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abra um Pull Request
+2. Crie branch (`git checkout -b feature/MinhaFeature`)
+3. Commit (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push (`git push origin feature/MinhaFeature`)
+5. Abra Pull Request
 
-### Áreas para Contribuição
-- Melhorias nos componentes UI
-- Otimizações de performance
-- Testes unitários
-- Documentação adicional
-
----
-
-## 📚 Sobre o DOE Framework
-
-O **DOE (Directive/Orchestration/Execution) Framework** é uma metodologia própria para construção de sistemas inteligentes baseados em agentes. Foi desenvolvido para este projeto e será implementado completamente na versão comercial.
-
-### Conceitos-Chave
-- **Separação de responsabilidades**: Cada camada tem propósito específico
-- **Self-Annealing**: Otimização contínua através de aprendizado
-- **Coordenação multi-agente**: Agentes trabalham em conjunto
-- **Adaptabilidade**: Sistema responde a mudanças em tempo real
-
----
-
-## 📄 Licença
-
-Este projeto é de código aberto para fins de portfólio. A implementação completa do DOE Framework permanecerá privada na versão comercial.
-
----
-
-## 👤 Autor
+## Autor
 
 **Mateus Marinho**
-- LinkedIn: [linkedin.com/in/momarinho94](https://linkedin.com/in/momarinho94)
-- GitHub: [@momarinho](https://github.com/momarinho)
-- Email: mateusomarinho@gmail.com
+
+- [LinkedIn](https://linkedin.com/in/momarinho94)
+- [GitHub](https://github.com/momarinho)
+- mateusomarinho@gmail.com
+
+## Licenca
+
+Codigo aberto para fins de portfolio. Implementacao completa do DOE Framework permanecera privada na versao comercial.
 
 ---
 
-## 🙏 Agradecimentos
-
-- [shadcn/ui](https://ui.shadcn.com/) - Componentes React
-- [N8N](https://n8n.io/) - Plataforma de automação
-- [Vercel](https://vercel.com/) - Hospedagem
-```
+Construido com Next.js, TypeScript e agentes inteligentes.

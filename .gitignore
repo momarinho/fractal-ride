@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -45,4 +46,13 @@ next-env.d.ts
 
 # Self-Annealing
 scripts/anneal_logs/
+
+# Backups
+*.bak
 *.bak.*
+
+# Ambiente local (redundante mas explícito)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

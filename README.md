@@ -1,3 +1,5 @@
+https://fractal-ride-three.vercel.app/
+
 # Fractal Ride
 
 E-commerce inteligente construído com **Next.js 15**, **TypeScript** e arquitetura de **agentes autônomos DOE** (Directive/Orchestration/Execution).
